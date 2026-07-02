@@ -96,6 +96,12 @@
   .dial-read:hover .dtip{opacity:1;visibility:visible}
   .tier{padding:3px 8px;border-radius:6px;font:9.5px 'Inter';letter-spacing:.05em;cursor:pointer;white-space:nowrap}
   .dial-n{font:10.5px 'JetBrains Mono',monospace;color:var(--faint2);white-space:nowrap}
+  .llchip{padding:2px 6px;border-radius:5px;border:1px solid var(--border2);font:9px 'Inter';letter-spacing:.03em;color:var(--faint2);white-space:nowrap}
+  .refrow{display:flex;align-items:baseline;gap:10px;padding:8px 0;border-top:1px solid #20242b;flex-wrap:wrap}
+  .refname{min-width:78px;font:600 11px 'Inter';color:var(--muted)}
+  .refread{font:12.5px 'JetBrains Mono',monospace;color:var(--text);min-width:52px}
+  .refstate{font:12px 'Inter';color:var(--muted);flex:1;min-width:120px}
+  .refnote{font:italic 400 10.5px 'Inter';color:var(--faint2)}
   .chev{color:var(--faint2);font-size:11px;transition:transform .3s}
   .dial-mean{padding-left:90px;margin-top:3px;font:13.5px/1.45 'Inter';color:var(--muted)}
   .pop{position:absolute;right:0;top:calc(100% + 7px);z-index:7;width:260px;padding:13px 15px;border-radius:11px;background:#0B0D11;border:1px solid #333a45;box-shadow:0 16px 36px rgba(0,0,0,.6)}
@@ -226,6 +232,30 @@ const READS=[
 const ORDER=['t2013','b2015','t2017','b2018','t2021','b2022','t2025','live'];
 const LEFT={t2013:4,b2015:13,t2017:33,b2018:42,t2021:63,b2022:72,t2025:90,live:99};
 
+/* §6.10 lead/lag tags for the core dials */
+const LL={trend:'coincident',valuation:'lags',sentiment:'coincident',dominance:'coincident'};
+
+/* Phase 6 reference layer — vetted instruments (values = workbook backfill).
+   Verdicts ride on the rows: NUPL display-only (=1−1/MVRV), Puell bottoms-only,
+   Hash Ribbon event flag, SSR oscillator form. Pi Cycle & active addresses were
+   vetted OUT (data-mined / decoupled). */
+function R(name,reading,state,ll,note){return {name,reading,state,ll,note};}
+const REF={
+  live:[
+    R('NUPL','0.12','hope','lags','pure transform of MVRV — display only, never composite'),
+    R('Puell','0.66','mid, near bottom band','coincident','bottoms-only instrument — top band dead post-halvings'),
+    R('Hash Ribbon','0.97','miner capitulation','confirms lows','event flag — false signals May/Jul 2025'),
+    R('SSR osc','−1.03','dry powder deep','leads','oscillator form — stables ≠ all BTC-bound'),
+  ],
+  t2013:[R('NUPL','0.79','euphoria','lags','display only'),R('Puell','8.22','top band (pre-decay)','coincident','bottoms-only now'),R('Hash Ribbon','1.28','expanding','confirms lows','event flag'),R('SSR osc','n/a','stables did not exist','leads','')],
+  t2017:[R('NUPL','0.77','euphoria','lags','display only'),R('Puell','6.35','top band (pre-decay)','coincident','bottoms-only now'),R('Hash Ribbon','1.11','expanding','confirms lows','event flag'),R('SSR osc','+1.50','dry powder thin','leads','oscillator form')],
+  t2021:[R('NUPL','0.65','belief','lags','display only'),R('Puell','1.47','mid — top band dead','coincident','bottoms-only now'),R('Hash Ribbon','1.05','normal','confirms lows','event flag'),R('SSR osc','+0.78','neutral','leads','oscillator form')],
+  t2025:[R('NUPL','0.56','belief','lags','display only'),R('Puell','1.07','mid — top band dead','coincident','bottoms-only now'),R('Hash Ribbon','1.05','normal','confirms lows','event flag'),R('SSR osc','+0.34','neutral','leads','oscillator form')],
+  b2015:[R('NUPL','−0.77','capitulation','lags','display only'),R('Puell','0.31','bottom band ✓','coincident','held at all 3 lows'),R('Hash Ribbon','1.02','normal','confirms lows','event flag'),R('SSR osc','n/a','stables too young','leads','')],
+  b2018:[R('NUPL','−0.45','capitulation','lags','display only'),R('Puell','0.39','bottom band ✓','coincident','held at all 3 lows'),R('Hash Ribbon','0.88','miner capitulation ✓','confirms lows','event flag'),R('SSR osc','−2.82','dry powder deep','leads','oscillator form')],
+  b2022:[R('NUPL','−0.29','capitulation','lags','display only'),R('Puell','0.43','bottom band ✓','coincident','held at all 3 lows'),R('Hash Ribbon','1.02','normal','confirms lows','event flag'),R('SSR osc','−0.94','loosening','leads','oscillator form')],
+};
+
 /* Live feed: publish_web.py writes cockpit_data.js -> window.COCKPIT_LIVE.
    If present it replaces the baked-in live entry; pivots are locked history. */
 if(window.COCKPIT_LIVE){
@@ -235,6 +265,7 @@ if(window.COCKPIT_LIVE){
     div:L.div,macro:L.macro,narrative:L.narrative,invalidation:L.invalidation,
     dials:mkdials(L.t,L.v,L.s,L.dom)
   });
+  if(L.ref) REF.live=L.ref;
 }
 
 /* ============================ STATE ============================ */
@@ -345,6 +376,7 @@ function dialsPanel(r){
         <div style="position:relative;display:flex;align-items:center;gap:9px">
           <span class="tier" style="color:${tierColor};border:${tierBorder};font-weight:${tierWeight};font-style:${d.tier==='story'?'italic':'normal'}" onclick="toggleTier('${d.key}',event)">${TTXT[d.tier]}</span>
           <span class="dial-n">${d.n}</span>
+          <span class="llchip">${LL[d.key]||''}</span>
           <span class="chev" style="transform:${exp?'rotate(180deg)':'rotate(0deg)'}">▾</span>
           ${pop?`<div class="pop"><div style="font:600 9.5px 'Inter';letter-spacing:.08em;color:#8A93A0;margin-bottom:7px">EVIDENCE · ${TTXT[d.tier]}</div><div style="font:12.5px/1.5 'Inter';color:#C6CCD3;margin-bottom:9px">${TDEF[d.tier]}</div><div style="padding-top:9px;border-top:1px solid #23272F;font:italic 400 12px/1.45 'Inter';color:#8A93A0">Caveat — ${d.caveat}</div></div>`:''}
         </div>
@@ -357,7 +389,14 @@ function dialsPanel(r){
         <div style="margin-top:9px;padding-top:10px;border-top:1px solid #23272F;font:italic 400 11.5px/1.45 'Inter';color:#6B7280">Caveat — ${d.caveat}</div>
       </div></div>`:''}
     </div>`;}).join('');
-  return `<div class="card"><div class="sect" style="margin-bottom:6px">Panel 3 · BTC-native dials</div>${rows}</div>`;
+  const ref=(REF[r.id]||[]).map(x=>`<div class="refrow">
+      <span class="refname">${x.name}</span><span class="refread">${x.reading}</span>
+      <span class="refstate">${x.state}</span><span class="llchip">${x.ll}</span>
+      ${x.note?`<span class="refnote">${x.note}</span>`:''}
+    </div>`).join('');
+  const refBlock=ref?`<div class="sect" style="margin:18px 0 4px">Reference layer · vetted instruments</div>
+    <div style="font:italic 400 11px/1.4 'Inter';color:var(--faint2);margin-bottom:4px">Consulted, not stared at — verdicts ride on each row. Vetted out: Pi Cycle (data-mined; no fire 2025), active addresses (decoupled).</div>${ref}`:'';
+  return `<div class="card"><div class="sect" style="margin-bottom:6px">Panel 3 · BTC-native dials</div>${rows}${refBlock}</div>`;
 }
 
 function narrativePanel(r){
