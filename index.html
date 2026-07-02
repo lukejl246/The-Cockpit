@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>The Cockpit — weekly read</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,450;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,450&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0D11; --panel:#181C22; --panel2:#20252D; --panel3:#13161B;
+    --border:#2A2F38; --border2:#23272F; --text:#E9ECEF; --muted:#99A1AC;
+    --faint:#6B7280; --faint2:#586170; --accent:#6EA8FE;
+    --z-bottoming:#3E7BD6; --z-accumulation:#21B8A6; --z-mid:#5FB37A;
+    --z-elevated:#E8A13A; --z-euphoria:#E4574C; --divergence:#B06FE0;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);
+    font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  ::-webkit-scrollbar{width:9px;height:9px}
+  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px}
+  ::-webkit-scrollbar-track{background:transparent}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .serif{font-family:'Fraunces',Georgia,serif}
+  .sect{font:600 10.5px 'Inter';letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+  .stage{min-height:100%;background:radial-gradient(1200px 600px at 50% -10%,#12161d,#0B0D11 60%);padding:34px 30px 60px}
+  .wrap{max-width:1160px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px 24px}
+
+  /* masthead */
+  .mast{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand h1{margin:0;font:600 31px 'Fraunces',Georgia,serif;letter-spacing:.01em}
+  .badge{font:600 9px 'Inter';letter-spacing:.14em;text-transform:uppercase;color:var(--faint);border:1px solid var(--border);border-radius:5px;padding:3px 7px}
+  .tag{font:400 12.5px 'Inter';color:#8A93A0;margin-top:5px}
+  .nowlbl{font:600 9.5px 'Inter';letter-spacing:.16em;text-transform:uppercase;color:var(--faint2)}
+
+  /* time machine */
+  .tm{background:#12151a;border:1px solid var(--border2);border-radius:15px;padding:20px 26px 14px}
+  .tm-nav{width:26px;height:26px;border-radius:7px;border:1px solid var(--border);background:var(--panel);color:var(--muted);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;user-select:none}
+  .tm-nav:hover{color:var(--text);border-color:#3a414c}
+  .tm-plot{position:relative;height:132px;margin-top:12px}
+  .tm-node{position:absolute;top:0;bottom:0;transform:translateX(-50%);width:46px;cursor:pointer}
+  .tm-dot{position:absolute;left:50%;transform:translate(-50%,-50%);border-radius:50%;transition:width .3s cubic-bezier(.22,1,.36,1),height .3s cubic-bezier(.22,1,.36,1),box-shadow .3s}
+  .tm-short{position:absolute;left:50%;top:108px;transform:translateX(-50%);font:10px 'JetBrains Mono',monospace;white-space:nowrap;transition:color .3s}
+
+  /* columns */
+  .cols{display:flex;gap:16px;align-items:flex-start}
+  .col{flex:1;display:flex;flex-direction:column;gap:16px;min-width:0}
+
+  /* verdict */
+  .verdict{margin:0 0 22px;font:450 24px/1.46 'Fraunces',Georgia,serif;color:#E4E8ED;letter-spacing:.002em}
+  .zoneName{font:600 50px/.9 'Fraunces',Georgia,serif;letter-spacing:.01em}
+  .qbtn{cursor:pointer;width:19px;height:19px;border-radius:50%;border:1px solid var(--border);color:var(--muted);font:600 11px 'Inter';display:inline-flex;align-items:center;justify-content:center;user-select:none}
+  .qbtn:hover{color:var(--text);border-color:#3a414c}
+  .divchip{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:9px;background:rgba(176,111,224,.12);border:1px solid rgba(176,111,224,.5)}
+  .divsq{width:9px;height:9px;border-radius:2px;transform:rotate(45deg);background:var(--divergence);box-shadow:0 0 10px rgba(176,111,224,.8)}
+
+  /* band */
+  .band{position:relative;height:15px;border-radius:8px;background:linear-gradient(90deg,#3E7BD6,#21B8A6 25%,#5FB37A 50%,#E8A13A 75%,#E4574C);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05),inset 0 2px 5px rgba(0,0,0,.25)}
+  .marker{position:absolute;top:-9px;bottom:-9px;width:0;animation:markerIn .9s cubic-bezier(.34,1.3,.5,1) both;pointer-events:none}
+  .marker .halo{position:absolute;left:50%;top:50%;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle,rgba(233,236,239,.5),rgba(233,236,239,0) 70%);animation:haloPulse 3.4s ease-in-out infinite}
+  .marker .stem{position:absolute;left:-1.5px;top:0;bottom:0;width:3px;border-radius:2px;background:var(--text);box-shadow:0 0 10px rgba(233,236,239,.6)}
+  .marker .knob{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:13px;height:13px;border-radius:50%;background:var(--text)}
+  .ticks{position:relative;height:24px}
+  .tick{position:absolute;bottom:0;transform:translateX(-50%);text-align:center}
+  .tick .t{font:9px 'JetBrains Mono',monospace;color:var(--faint2)}
+  .tick .bar{width:1px;height:7px;margin:2px auto 0}
+  .zlabels{display:flex;margin-top:13px}
+  .zlabels>div{flex:1;padding-top:8px}
+  .zl{font-family:'Inter';font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+
+  .vmeta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:22px;padding-top:15px;border-top:1px solid var(--border2);font:11.5px 'JetBrains Mono',monospace;color:var(--muted)}
+  .vsep{width:1px;height:12px;background:var(--border)}
+  .pill{padding:2px 7px;border:1px solid var(--border);border-radius:5px;color:var(--faint);font-size:10px}
+
+  /* macro */
+  .mstate{display:inline-flex;align-items:center;gap:8px;padding:5px 11px;border-radius:8px}
+  .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .mtile{position:relative;padding:12px 13px;border-radius:10px;background:var(--panel2);border:1px solid var(--border2)}
+  .mtile .lbl{display:flex;align-items:center;gap:6px;font:500 10px 'Inter';letter-spacing:.05em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+  .mtile .val{font:16px 'JetBrains Mono',monospace;color:var(--text)}
+  .mtile .val .sub{font-size:11px;color:var(--faint)}
+  .tip{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:5;padding:10px 12px;border-radius:9px;background:#0B0D11;border:1px solid #333a45;box-shadow:0 12px 30px rgba(0,0,0,.55);font:12px/1.45 'Inter';color:#C6CCD3;opacity:0;visibility:hidden;transition:opacity .18s}
+  .mtile:hover .tip{opacity:1;visibility:visible}
+
+  /* dials */
+  .dial{border-top:1px solid var(--border2)}
+  .dial-row{display:flex;align-items:center;gap:12px;padding:13px 0;cursor:pointer}
+  .dial-label{min-width:78px;font:600 12px 'Inter';letter-spacing:.03em;color:var(--text)}
+  .dial-read{position:relative;display:flex;align-items:center;gap:7px;min-width:118px}
+  .dial-read .r{font:13.5px 'JetBrains Mono',monospace}
+  .dtip{position:absolute;left:0;top:calc(100% + 7px);z-index:6;width:230px;padding:10px 12px;border-radius:9px;background:#0B0D11;border:1px solid #333a45;box-shadow:0 12px 30px rgba(0,0,0,.55);font:12px/1.45 'Inter';color:#C6CCD3;opacity:0;visibility:hidden;transition:opacity .18s}
+  .dial-read:hover .dtip{opacity:1;visibility:visible}
+  .tier{padding:3px 8px;border-radius:6px;font:9.5px 'Inter';letter-spacing:.05em;cursor:pointer;white-space:nowrap}
+  .dial-n{font:10.5px 'JetBrains Mono',monospace;color:var(--faint2);white-space:nowrap}
+  .chev{color:var(--faint2);font-size:11px;transition:transform .3s}
+  .dial-mean{padding-left:90px;margin-top:3px;font:13.5px/1.45 'Inter';color:var(--muted)}
+  .pop{position:absolute;right:0;top:calc(100% + 7px);z-index:7;width:260px;padding:13px 15px;border-radius:11px;background:#0B0D11;border:1px solid #333a45;box-shadow:0 16px 36px rgba(0,0,0,.6)}
+  .expand{padding:2px 0 16px 90px}
+  .expand .inner{padding:13px 16px;border-radius:11px;background:var(--panel3);border:1px solid var(--border2)}
+  .post{margin:0 0 12px;font:italic 450 15.5px/1.5 'Fraunces',Georgia,serif;color:#D8DDE3}
+
+  /* narrative + calibration */
+  .narr{display:flex;gap:11px;align-items:baseline}
+  .narr .a{font:13px 'JetBrains Mono',monospace;width:14px;text-align:center;color:var(--faint2)}
+  .narr .t{font:13.5px/1.5 'Inter';color:#C6CCD3}
+  .calhead{display:flex;gap:10px;padding:0 4px 8px;font:600 9px 'Inter';letter-spacing:.08em;text-transform:uppercase;color:var(--faint2)}
+  .calrow{display:flex;gap:10px;align-items:center;padding:9px 4px;border-top:1px solid #20242b}
+  .pending{padding:13px 15px;border-radius:11px;background:rgba(62,123,214,.08);border:1px solid rgba(62,123,214,.28);margin-bottom:14px}
+
+  .footer{font:12px/1.65 'Inter';color:var(--faint2);max-width:900px;border-top:1px solid #1b1f26;padding-top:18px}
+  @keyframes markerIn{from{transform:translateX(-32px)}to{transform:translateX(0)}}
+  @keyframes haloPulse{0%,100%{opacity:.35;transform:translate(-50%,-50%) scale(1)}50%{opacity:.8;transform:translate(-50%,-50%) scale(1.25)}}
+  @keyframes expandIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ---- responsive: collapse to single column / phone sizes ---- */
+  @media(max-width:820px){
+    .stage{padding:18px 12px 40px}
+    .cols{flex-direction:column}
+    .card{padding:17px 18px}
+    .verdict{font-size:17px}
+    .zoneName{font-size:30px}
+    .zl{font-size:8px;letter-spacing:0;text-transform:none}
+    .ticks{display:none}
+    .brand h1{font-size:26px}
+    .hide-sm{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="stage"><div class="wrap" id="app"></div></div>
+
+<script src="cockpit_data.js"></script>
+<script>
+/* ============================ DATA ============================ */
+const ZONES=['bottoming','accumulation','mid-cycle','elevated','euphoria'];
+const CUTS=[0.2,0.4,0.6,0.8];
+const ZC={bottoming:'#3E7BD6',accumulation:'#21B8A6','mid-cycle':'#5FB37A',elevated:'#E8A13A',euphoria:'#E4574C'};
+const MC={tailwind:'#5FB37A',neutral:'#9BA6A0',headwind:'#E4574C'};
+const MARR={tailwind:'↑',neutral:'→',headwind:'↓'};
+const ARR={up:'↑',down:'↓',flat:'→'};
+const TTXT={mechanism:'MECHANISM',base:'BASE RATE',story:'STORY'};
+const TDEF={mechanism:'Why it should work — a causal chain. The strongest tier; it survives regime change.',base:'In n prior instances of this state, an outcome followed. Strong, but capped by the tiny sample.',story:'“This looks like …”. The weakest, most seductive tier — colour only, always labelled a story.'};
+const DET={trend:'Log-regression channel position (0 = historic bottom band, 1 = top band).',valuation:'MVRV = market value ÷ realized value. Above 1 = aggregate in profit; below 1 = underwater.',sentiment:'Weekly RSI(14) plus the Fear & Greed index (0 = extreme fear, 100 = extreme greed).',dominance:'BTC dominance — Bitcoin’s share of total crypto market cap. The rotation tell.'};
+const CAV={trend:'Bands fit to ~3–4 cycles — a small sample.',valuation:'MVRV-Z thresholds drift down each cycle — flag it, never hard-band.',sentiment:'Fear & Greed only exists from Feb 2018; earlier pivots are n/a.',dominance:'Not part of the Phase-1 backfill — a mechanism read on a short history.'};
+function zoneOf(c){let n=0;for(const x of CUTS){if(c>=x)n++;}return ZONES[n];}
+function rgba(hex,a){const h=hex.replace('#','');return 'rgba('+parseInt(h.slice(0,2),16)+','+parseInt(h.slice(2,4),16)+','+parseInt(h.slice(4,6),16)+','+a+')';}
+function D(key,label,reading,dir,meaning,post,tier,n,na){return {key,label,reading,dir,meaning,post,tier,n,detail:DET[key],caveat:CAV[key],na:!!na};}
+function mkdials(t,v,s,dom){return [
+  D('trend','Trend',t[0],t[1],t[2],t[3],'base','n=7'),
+  D('valuation','Valuation',v[0],v[1],v[2],v[3],'base','n=7'),
+  D('sentiment','Sentiment',s[0],s[1],s[2],s[3],'base','n=7'),
+  dom ? D('dominance','Dominance',dom[0],dom[1],dom[2],dom[3],'mechanism','short hist.')
+      : D('dominance','Dominance','n/a','flat','not in Phase-1 backfill','','story','—',true),
+];}
+
+const READS=[
+  {id:'live',kind:'live',short:'Live',label:'Live read',date:'2026-07-01',price:'$58,525',composite:0.16,
+   verdict:'Bottoming — BTC sits in the composite band that marked the 2015 / 2018 / 2022 lows (n=3), sentiment at extreme fear, macro still a headwind. No price/valuation divergence.',
+   div:{on:false},
+   macro:{state:'headwind',netLiq:'$5.79T',netLiqTrend:'falling',dxy:'120.9',real10y:'2.16%',fed:'hold'},
+   dials:mkdials(['0.09','down','deep below the long-term mean','stretched to the downside, like past accumulation zones'],['MVRV 1.10','down','barely above cost basis','holders near break-even, not euphoric'],['RSI 32 · F&G 11','flat','crowd fearful, momentum cold','extreme fear and cold momentum, like past lows'],['BTC.D 55.4%','flat','BTC-led, no alt-season froth','capital hiding in BTC, not chasing alts']),
+   narrative:[{dir:'down',text:'Composite 0.17 → 0.16 (still bottoming).'},{dir:'down',text:'Fear & Greed 15 → 11 (deeper fear).'},{dir:'down',text:'Net liquidity still falling.'}],
+   invalidation:'flip off bottoming if composite prints > 0.20 and price reclaims its long-term mean.',outcome:null},
+
+  {id:'t2013',kind:'top',short:"'13 top",label:'2013 top',date:'2013-12-04',price:'$1,135',composite:0.97,
+   verdict:'Euphoria — BTC is as stretched above its long-term trend as it has ever been, valuation at an extreme premium to cost basis. The first cycle top on record: no prior tops to base-rate against (n=0). Macro a tailwind. And a divergence: November’s valuation peak ran below April’s — price ahead of on-chain value.',
+   div:{on:true},
+   macro:{state:'tailwind',netLiq:'$3.88T',netLiqTrend:'rising',dxy:'93.9',real10y:'0.73%',fed:'hold'},
+   dials:mkdials(['1.00','up','at the very top of the channel','as stretched vs trend as price has ever been'],['MVRV 4.72','up','extreme premium to cost basis','~4.7× cost basis — historically top territory'],['RSI 97 · F&G n/a','up','momentum at its ceiling','weekly RSI near 100 — a blow-off'],null),
+   narrative:[{dir:'up',text:'Composite 0.88 → 0.97 (into euphoria).'},{dir:'up',text:'Weekly RSI 92 → 97 (blow-off).'},{dir:'up',text:'Price ~doubled in five weeks.'}],
+   invalidation:'',outcome:{win:'fwd 12 mo',range:'≈ −58%',scored:'within'}},
+
+  {id:'t2017',kind:'top',short:"'17 top",label:'2017 top',date:'2017-12-16',price:'$19,641',composite:0.93,
+   verdict:'Euphoria — valuation at ~4.4× cost basis and weekly RSI near its ceiling, matching the one prior top on record (n=1). Macro neutral; Fear & Greed not yet tracked.',
+   div:{on:false},
+   macro:{state:'neutral',netLiq:'$4.30T',netLiqTrend:'flat',dxy:'111.1',real10y:'0.47%',fed:'hiking'},
+   dials:mkdials(['0.96','up','at the top of the channel','fully stretched above the long-term mean'],['MVRV 4.43','up','extreme premium to cost basis','~4.4× cost basis — top territory'],['RSI 90 · F&G n/a','up','momentum at an extreme','weekly RSI in the 90s — retail mania'],['BTC.D 59.0%','down','alts already siphoning share','retail mania spilling into alts — the Jan 2018 alt-bubble followed']),
+   narrative:[{dir:'up',text:'Composite 0.86 → 0.93 (euphoria).'},{dir:'up',text:'MVRV 3.6 → 4.4 (premium widening).'},{dir:'up',text:'Retail mania — F&G not yet tracked.'}],
+   invalidation:'',outcome:{win:'fwd 12 mo',range:'≈ −73%',scored:'within'}},
+
+  {id:'t2021',kind:'top',short:"'21 top",label:'2021 top',date:'2021-11-08',price:'$67,542',composite:0.66,
+   verdict:'Elevated — stretched above trend with rich valuation, but short of the 2013/2017 blow-off extremes (n=2). Greed high. And a divergence: price at new highs while on-chain valuation made a lower high.',
+   div:{on:true},
+   macro:{state:'tailwind',netLiq:'$6.94T',netLiqTrend:'rising',dxy:'113.8',real10y:'−1.11%',fed:'hold'},
+   dials:mkdials(['0.70','up','well above the mean','stretched up, but short of prior blow-offs'],['MVRV 2.85','up','richly valued','~2.9× cost basis — late-cycle territory'],['RSI 70 · F&G 75','up','hot momentum, greedy crowd','overheated weekly momentum plus greed'],['BTC.D 43.6%','down','deep alt-season','capital rotated hard into alts — classic late-cycle froth']),
+   narrative:[{dir:'up',text:'Composite 0.60 → 0.66 (elevated).'},{dir:'up',text:'Fear & Greed 68 → 75 (greed).'},{dir:'flat',text:'A second, lower peak vs April — watch it.'}],
+   invalidation:'',outcome:{win:'fwd 12 mo',range:'≈ −64%',scored:'within'}},
+
+  {id:'t2025',kind:'top',short:"'25 top",label:'2025 top',date:'2025-10-06',price:'$124,824',composite:0.48,
+   verdict:'Mid-cycle — warm but not extreme: ~2.3× cost basis, momentum greedy, stretch only mid-channel (n=3). ETF-era demand ran shallower than past tops. Macro neutral. And a divergence: price at new highs while on-chain valuation made a lower high.',
+   div:{on:true},
+   macro:{state:'neutral',netLiq:'$5.76T',netLiqTrend:'flat',dxy:'120.3',real10y:'1.84%',fed:'cutting'},
+   dials:mkdials(['0.42','up','near the long-term mean','mid-channel — neither cheap nor stretched'],['MVRV 2.29','up','above cost basis','~2.3× cost basis — warm, not extreme'],['RSI 65 · F&G 71','up','warm momentum, greedy crowd','greed rising while trend only mid-channel'],['BTC.D 59.5%','flat','BTC-led cycle, no alt froth','ETF flows kept this cycle in BTC — unlike 2021']),
+   narrative:[{dir:'up',text:'Composite 0.44 → 0.48 (mid-cycle).'},{dir:'up',text:'Fear & Greed 64 → 71 (greed rising).'},{dir:'flat',text:'ETF era — shallower stretch than 2021.'}],
+   invalidation:'',outcome:{win:'fwd ~9 mo',range:'≈ −53%',scored:'outside'}},
+
+  {id:'b2015',kind:'bottom',short:"'15 low",label:'2015 bottom',date:'2015-01-14',price:'$176',composite:0.11,
+   verdict:'Bottoming — price deep below its long-term mean and underwater vs aggregate cost basis. The first bottom on record: no prior bottoms to base-rate against (n=0). Macro calm.',
+   div:{on:false},
+   macro:{state:'neutral',netLiq:'$4.26T',netLiqTrend:'flat',dxy:'103.1',real10y:'0.29%',fed:'hold'},
+   dials:mkdials(['0.17','down','deep below the mean','stretched to the downside'],['MVRV 0.56','down','underwater vs cost basis','market below what it paid — capitulation'],['RSI 26 · F&G n/a','down','momentum cold','weekly momentum washed out'],['BTC.D 98.3%','flat','BTC essentially the whole market','pre-alt era — dominance near total']),
+   narrative:[{dir:'down',text:'Composite 0.14 → 0.11 (deep bottoming).'},{dir:'down',text:'MVRV under 1 (holders underwater).'},{dir:'flat',text:'Grinding, low-volume capitulation.'}],
+   invalidation:'',outcome:{win:'fwd 12 mo',range:'≈ +130%',scored:'within'}},
+
+  {id:'b2018',kind:'bottom',short:"'18 low",label:'2018 bottom',date:'2018-12-15',price:'$3,185',composite:0.13,
+   verdict:'Bottoming — market underwater vs cost basis with momentum cold and extreme fear pinned, matching the 2015 low (n=1). Macro a headwind — the Fed is hiking.',
+   div:{on:false},
+   macro:{state:'headwind',netLiq:'$3.75T',netLiqTrend:'falling',dxy:'116.8',real10y:'1.07%',fed:'hiking'},
+   dials:mkdials(['0.19','down','deep below the mean','stretched to the downside, like 2015'],['MVRV 0.69','down','underwater vs cost basis','below aggregate cost basis — capitulation'],['RSI 29 · F&G 11','down','cold momentum, extreme fear','extreme fear pinned at 11'],['BTC.D 59.2%','up','capital hiding back in BTC','the 2017 alt bubble unwound — money fled to BTC']),
+   narrative:[{dir:'down',text:'Composite 0.17 → 0.13 (bottoming).'},{dir:'down',text:'Fear & Greed pinned at 11 (extreme fear).'},{dir:'down',text:'November capitulation flush.'}],
+   invalidation:'',outcome:{win:'fwd 12 mo',range:'≈ +125%',scored:'within'}},
+
+  {id:'b2022',kind:'bottom',short:"'22 low",label:'2022 bottom',date:'2022-11-21',price:'$15,778',composite:0.10,
+   verdict:'Bottoming — the composite at its coldest, deep below trend and cost basis after the FTX flush (n=2 prior bottoms). Macro a headwind — the fastest hiking cycle on record.',
+   div:{on:false},
+   macro:{state:'headwind',netLiq:'$6.00T',netLiqTrend:'falling',dxy:'124.7',real10y:'1.52%',fed:'hiking'},
+   dials:mkdials(['0.09','down','coldest in the channel','the deepest stretch below trend on record'],['MVRV 0.78','down','underwater vs cost basis','below cost basis — capitulation'],['RSI 31 · F&G 21','down','cold momentum, fear','post-FTX fear, momentum washed out'],['BTC.D 40.0%','flat','alt supply still heavy','dominance low even at the bottom — a regime shift vs 2015/2018']),
+   narrative:[{dir:'down',text:'Composite 0.13 → 0.10 (bottoming).'},{dir:'down',text:'Fear & Greed 21 → deeper (post-FTX).'},{dir:'down',text:'Forced-seller capitulation.'}],
+   invalidation:'',outcome:{win:'fwd 12 mo',range:'≈ +155%',scored:'within'}},
+];
+const ORDER=['t2013','b2015','t2017','b2018','t2021','b2022','t2025','live'];
+const LEFT={t2013:4,b2015:13,t2017:33,b2018:42,t2021:63,b2022:72,t2025:90,live:99};
+
+/* Live feed: publish_web.py writes cockpit_data.js -> window.COCKPIT_LIVE.
+   If present it replaces the baked-in live entry; pivots are locked history. */
+if(window.COCKPIT_LIVE){
+  const L=window.COCKPIT_LIVE, i=READS.findIndex(r=>r.id==='live');
+  READS[i]=Object.assign({},READS[i],{
+    date:L.date,price:L.price,composite:L.composite,verdict:L.verdict,
+    div:L.div,macro:L.macro,narrative:L.narrative,invalidation:L.invalidation,
+    dials:mkdials(L.t,L.v,L.s,L.dom)
+  });
+}
+
+/* ============================ STATE ============================ */
+const S={readId:'live',expanded:null,pop:null,showRules:false};
+const read=()=>READS.find(r=>r.id===S.readId)||READS[0];
+function setRead(id){S.readId=id;S.expanded=null;S.pop=null;render();}
+function step(d){const i=ORDER.indexOf(S.readId);S.readId=ORDER[Math.max(0,Math.min(ORDER.length-1,i+d))];S.expanded=null;S.pop=null;render();}
+function toggleDial(k){S.expanded=S.expanded===k?null:k;S.pop=null;render();}
+function toggleTier(k,e){if(e)e.stopPropagation();S.pop=S.pop===k?null:k;render();}
+function toggleRules(){S.showRules=!S.showRules;render();}
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+/* ============================ RENDER ============================ */
+function timeMachine(){
+  const cur=read();
+  const wave=ORDER.map(id=>{const r=READS.find(x=>x.id===id);return (LEFT[id]*10)+','+Math.round(12+(1-r.composite)*84);}).join(' ');
+  const nodes=ORDER.map(id=>{
+    const r=READS.find(x=>x.id===id);const sel=id===S.readId;const col=ZC[zoneOf(r.composite)];
+    const size=sel?17:11, top=Math.round(12+(1-r.composite)*84);
+    const ring=sel?('0 0 0 4px '+rgba(col,.26)+',0 0 16px '+rgba(col,.7)):'0 0 0 2px #12151a';
+    return `<div class="tm-node" style="left:${LEFT[id]}%" onclick="setRead('${id}')">
+      <span class="tm-dot" style="top:${top}px;width:${size}px;height:${size}px;background:${col};box-shadow:${ring}"></span>
+      <span class="tm-short" style="color:${sel?'#E9ECEF':'#6B7280'}">${r.short.replace(' top','').replace(' low','')==='Live'?'Live':r.short.replace(' top',"'").replace(' low',"'").replace("''","'")}</span>
+    </div>`;}).join('');
+  return `<div class="tm">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <span class="sect">Time machine · the cycle so far</span>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="font:12px 'Inter';color:#6B7280" class="hide-sm">click a pivot to re-read the cockpit at that date</span>
+        <div style="display:flex;gap:6px"><span class="tm-nav" onclick="step(-1)">◀</span><span class="tm-nav" onclick="step(1)">▶</span></div>
+      </div>
+    </div>
+    <div class="tm-plot">
+      <svg viewBox="0 0 1000 100" preserveAspectRatio="none" style="position:absolute;left:0;top:0;width:100%;height:100px;overflow:visible">
+        <polyline points="${wave}" fill="none" stroke="#2b323c" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"></polyline>
+      </svg>${nodes}
+    </div></div>`;
+}
+
+function verdictPanel(r){
+  const zone=zoneOf(r.composite),zColor=ZC[zone],pct=Math.round(r.composite*100);
+  const ticks=READS.filter(x=>x.kind!=='live').map(x=>{const c=ZC[zoneOf(x.composite)];return `<div class="tick" style="left:${Math.round(x.composite*100)}%"><div class="t">${x.short.replace(' top','').replace(' low','')}</div><div class="bar" style="background:${rgba(c,.7)}"></div></div>`;}).join('');
+  const zlabels=ZONES.map(z=>{const on=z===zone;return `<div style="border-top:2px solid ${rgba(ZC[z],on?1:.4)}"><span class="zl" style="color:${on?'#E9ECEF':'#6B7280'};font-weight:${on?600:500}">${z}</span></div>`;}).join('');
+  return `<div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px">
+      <span class="sect">Panel 1 · The Verdict</span>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="display:inline-flex;align-items:center;gap:7px;font:500 11px 'Inter';color:#99A1AC"><span style="width:6px;height:6px;border-radius:50%;background:#5FB37A;box-shadow:0 0 8px #5FB37A"></span>weekly read</span>
+        <span class="qbtn" onclick="toggleRules()" title="Rules of Evidence">?</span>
+      </div>
+    </div>
+    <p class="verdict">${esc(r.verdict)}</p>
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <div style="display:flex;align-items:flex-end;gap:15px">
+        <div class="zoneName" style="color:${zColor};text-shadow:0 0 34px ${rgba(zColor,.3)}">${zone.toUpperCase()}</div>
+        <div style="font:10.5px/1.5 'JetBrains Mono',monospace;color:#586170;padding-bottom:7px">composite<br><span style="color:#99A1AC;font-size:13px">${r.composite.toFixed(2)}</span> · internal</div>
+      </div>
+      ${r.div.on?`<div class="divchip"><span class="divsq"></span><span style="font:600 11px 'Inter';letter-spacing:.04em;color:#D9BEF2">DIVERGENCE ON</span></div>`:''}
+    </div>
+    <div style="position:relative;margin-top:22px">
+      <div class="ticks">${ticks}</div>
+      <div class="band"><div class="marker" style="left:${pct}%"><div class="halo"></div><div class="stem"></div><div class="knob" style="box-shadow:0 0 0 3px #181C22,0 0 0 4.5px ${rgba(zColor,.55)}"></div></div></div>
+      <div class="zlabels">${zlabels}</div>
+    </div>
+    <div class="vmeta"><span>${r.date}</span><span class="vsep"></span><span class="pill">method v1.0</span><span class="vsep"></span><span>BTC <span style="color:#E9ECEF">${r.price}</span></span></div>
+    ${S.showRules?rulesPopover():''}
+  </div>`;
+}
+function rulesPopover(){return `<div style="margin-top:16px;padding:16px 18px;border-radius:12px;background:#13161B;border:1px solid #2A2F38;animation:expandIn .3s ease both">
+  <div class="sect" style="margin-bottom:12px">Rules of Evidence — the three tiers</div>
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="display:flex;gap:11px;align-items:baseline"><span style="font:600 10px 'Inter';letter-spacing:.05em;color:#C6CCD3;min-width:82px">MECHANISM</span><span style="font:13px/1.5 'Inter';color:#99A1AC">Why it should work — a causal chain. Strongest; survives regime change.</span></div>
+    <div style="display:flex;gap:11px;align-items:baseline"><span style="font:500 10px 'Inter';letter-spacing:.05em;color:#99A1AC;min-width:82px">BASE RATE</span><span style="font:13px/1.5 'Inter';color:#99A1AC">In <span class="mono">n</span> prior instances, an outcome followed — the <span class="mono">n</span> is always shown.</span></div>
+    <div style="display:flex;gap:11px;align-items:baseline"><span style="font:italic 400 10px 'Inter';letter-spacing:.05em;color:#6B7280;min-width:82px">STORY</span><span style="font:13px/1.5 'Inter';color:#99A1AC">“This looks like …”. Weakest — colour only, labelled a story.</span></div>
+  </div>
+  <div style="margin-top:13px;padding-top:12px;border-top:1px solid #23272F;font:italic 400 12px/1.5 'Inter';color:#6B7280">Show the zone, not the decimal · state-signals only, never trade-signals · the caveat is part of the claim.</div>
+</div>`;}
+
+function macroPanel(r){
+  const m=r.macro,col=MC[m.state];
+  const tiles=[
+    {label:'Net liquidity',value:m.netLiq,sub:'('+m.netLiqTrend+')',tip:'WALCL − TGA − reverse repo. The tide of dollars behind risk assets; the layer no other BTC dashboard fuses in.'},
+    {label:'USD index',value:m.dxy,sub:'',tip:'Broad dollar index (a DXY proxy). A stronger dollar is typically a headwind for BTC.'},
+    {label:'Real 10y',value:m.real10y,sub:'',tip:'10-year TIPS yield — the real cost of money. Higher real yields pull liquidity out of risk.'},
+    {label:'Fed stance',value:m.fed,sub:'',tip:'Direction of the Fed funds target vs ~6 months prior: hiking, cutting, or hold.'},
+  ].map(t=>`<div class="mtile"><div class="lbl">${t.label}<span style="opacity:.5;font-size:9px">ⓘ</span></div><div class="val">${t.value}${t.sub?`<span class="sub"> ${t.sub}</span>`:''}</div><div class="tip">${t.tip}</div></div>`).join('');
+  return `<div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px">
+      <span class="sect">Panel 2 · Macro backdrop</span>
+      <span class="mstate" style="background:${rgba(col,.12)};border:1px solid ${rgba(col,.45)}"><span style="font:600 11px 'Inter';letter-spacing:.06em;color:${col}">${m.state.toUpperCase()}</span><span style="font-size:12px;color:${col}">${MARR[m.state]}</span></span>
+    </div>
+    <div class="mgrid">${tiles}</div>
+    <div style="margin-top:13px;font:italic 400 12px/1.5 'Inter';color:#6B7280">Derived 3-state — reads <em>beside</em> the composite, never folded into it.</div>
+  </div>`;
+}
+
+function dialsPanel(r){
+  const rows=r.dials.map(d=>{
+    const tierColor=d.tier==='mechanism'?'#C6CCD3':d.tier==='base'?'#99A1AC':'#6B7280';
+    const tierWeight=d.tier==='mechanism'?600:d.tier==='base'?500:400;
+    const tierBorder=d.tier==='story'?'1px dashed #2A2F38':'1px solid #2A2F38';
+    const exp=S.expanded===d.key,pop=S.pop===d.key;
+    return `<div class="dial">
+      <div class="dial-row" onclick="toggleDial('${d.key}')">
+        <div class="dial-label">${d.label}</div>
+        <div class="dial-read"><span class="r" style="color:${d.na?'#586170':'#E9ECEF'}">${esc(d.reading)}</span><span style="font-size:12px;color:#6B7280">${ARR[d.dir]}</span><div class="dtip">${d.detail}</div></div>
+        <div style="flex:1;min-width:0"></div>
+        <div style="position:relative;display:flex;align-items:center;gap:9px">
+          <span class="tier" style="color:${tierColor};border:${tierBorder};font-weight:${tierWeight};font-style:${d.tier==='story'?'italic':'normal'}" onclick="toggleTier('${d.key}',event)">${TTXT[d.tier]}</span>
+          <span class="dial-n">${d.n}</span>
+          <span class="chev" style="transform:${exp?'rotate(180deg)':'rotate(0deg)'}">▾</span>
+          ${pop?`<div class="pop"><div style="font:600 9.5px 'Inter';letter-spacing:.08em;color:#8A93A0;margin-bottom:7px">EVIDENCE · ${TTXT[d.tier]}</div><div style="font:12.5px/1.5 'Inter';color:#C6CCD3;margin-bottom:9px">${TDEF[d.tier]}</div><div style="padding-top:9px;border-top:1px solid #23272F;font:italic 400 12px/1.45 'Inter';color:#8A93A0">Caveat — ${d.caveat}</div></div>`:''}
+        </div>
+      </div>
+      <div class="dial-mean">${esc(d.meaning)}</div>
+      ${exp?`<div class="expand" style="animation:expandIn .32s cubic-bezier(.22,1,.36,1) both"><div class="inner">
+        <div style="font:600 9.5px 'Inter';letter-spacing:.1em;text-transform:uppercase;color:#586170;margin-bottom:7px">Post angle — the teachable line</div>
+        <p class="post">“${esc(d.post||d.meaning)}”</p>
+        <div style="font:12px/1.5 'Inter';color:#8A93A0"><span style="color:#6B7280">How it reads: </span>${d.detail}</div>
+        <div style="margin-top:9px;padding-top:10px;border-top:1px solid #23272F;font:italic 400 11.5px/1.45 'Inter';color:#6B7280">Caveat — ${d.caveat}</div>
+      </div></div>`:''}
+    </div>`;}).join('');
+  return `<div class="card"><div class="sect" style="margin-bottom:6px">Panel 3 · BTC-native dials</div>${rows}</div>`;
+}
+
+function narrativePanel(r){
+  const lines=r.narrative.map(n=>`<div class="narr"><span class="a">${ARR[n.dir]}</span><span class="t">${esc(n.text)}</span></div>`).join('');
+  return `<div class="card"><div class="sect" style="margin-bottom:14px">Panel 4 · Narrative log <span style="color:#454b55">· week over week</span></div><div style="display:flex;flex-direction:column;gap:11px">${lines}</div></div>`;
+}
+
+function calibrationPanel(r){
+  const scoreMap={within:{label:'in band',color:'#5FB37A'},outside:{label:'out of band',color:'#E4574C'},pending:{label:'pending',color:'#6B7280'}};
+  const within=READS.filter(x=>x.outcome&&x.outcome.scored==='within').length;
+  const outside=READS.filter(x=>x.outcome&&x.outcome.scored==='outside').length;
+  const rows=READS.map(x=>{const rz=zoneOf(x.composite),o=x.outcome,sc=o?o.scored:'pending',cur=x.id===r.id;
+    return `<div class="calrow" style="background:${cur?'rgba(110,168,254,.09)':'transparent'}">
+      <span style="width:66px;font:11px 'JetBrains Mono',monospace;color:${cur?'#E9ECEF':'#8A93A0'}">${x.short}</span>
+      <span style="flex:1;display:inline-flex;align-items:center;gap:7px;min-width:0"><span style="width:8px;height:8px;border-radius:50%;flex:none;background:${ZC[rz]}"></span><span style="font:12px 'Inter';color:#99A1AC;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${rz}</span></span>
+      <span style="width:88px;font:11.5px 'JetBrains Mono',monospace;color:#C6CCD3">${o?o.range:'—'}</span>
+      <span style="width:70px;text-align:right;font:600 10px 'Inter';color:${scoreMap[sc].color}">${scoreMap[sc].label}</span>
+    </div>`;}).join('');
+  const pending=r.id==='live'?`<div class="pending"><div style="font:600 10px 'Inter';letter-spacing:.05em;text-transform:uppercase;color:#6EA8FE;margin-bottom:6px">Entry #1 · pending</div><div style="font:12.5px/1.5 'Inter';color:#C6CCD3;margin-bottom:9px">Outcome resolves at 4 / 8 / 12 weeks. Calibration builds as weeks pass.</div><div style="font:12px/1.45 'Inter';color:#8A93A0"><span style="color:#6B7280">Invalidation line — </span>${esc(r.invalidation)}</div></div>`:'';
+  return `<div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px"><span class="sect">Panel 5 · Calibration log</span><span style="font:10px 'JetBrains Mono',monospace;color:#586170">${within} in band · ${outside} out · n=${within+outside}</span></div>
+    ${pending}
+    <div class="calhead"><span style="width:66px">Pivot</span><span style="flex:1">Zone called</span><span style="width:88px">Forward</span><span style="width:70px;text-align:right">Scored</span></div>
+    ${rows}
+    <div style="margin-top:12px;font:italic 400 11.5px/1.45 'Inter';color:#6B7280">Retrospective back-test — the live track record starts with the 2026-07-01 entry. Outcomes are ranges of real forward price, framed as state, never trade calls.</div>
+  </div>`;
+}
+
+function masthead(r){const zone=zoneOf(r.composite);return `<div class="mast">
+  <div><div class="brand"><h1 class="serif">The Cockpit</h1><span class="badge">private</span></div>
+  <div class="tag">A private Bitcoin cycle-reading dashboard · reading the tide, not calling the top</div></div>
+  <div style="text-align:right"><div class="nowlbl">Now reading</div>
+    <div style="display:flex;align-items:center;gap:9px;justify-content:flex-end;margin-top:6px"><span style="width:9px;height:9px;border-radius:50%;background:${ZC[zone]};box-shadow:0 0 10px ${ZC[zone]}"></span><span style="font:14px 'JetBrains Mono',monospace">${r.label}</span></div>
+    <div style="font:11px 'JetBrains Mono',monospace;color:#6B7280;margin-top:4px">${r.date} · ${zone.toUpperCase()} · BTC ${r.price}</div>
+    ${window.COCKPIT_LIVE&&window.COCKPIT_LIVE.generated?`<div style="font:10px 'JetBrains Mono',monospace;color:#454b55;margin-top:3px">live feed · updated ${window.COCKPIT_LIVE.generated}</div>`:''}
+  </div></div>`;}
+
+function render(){
+  const r=read();
+  document.getElementById('app').innerHTML=
+    masthead(r)+timeMachine()+verdictPanel(r)+
+    `<div class="cols"><div class="col">${macroPanel(r)}${dialsPanel(r)}</div><div class="col">${narrativePanel(r)}${calibrationPanel(r)}</div></div>`+
+    `<div class="footer">Both the desktop and phone read the same selected week. Readings are the Phase-1 backfill (Coin Metrics · FRED · alternative.me); the composite is the equal-weight trend / valuation / sentiment model, shown as a zone, never a decimal. Historical calibration is a retrospective back-test — the live track record begins with the 2026-07-01 entry. Context and education, not financial advice.</div>`;
+}
+render();
+</script>
+</body>
+</html>
