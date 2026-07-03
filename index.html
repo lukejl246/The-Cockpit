@@ -130,19 +130,44 @@
   @keyframes expandIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
   @keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
+  /* ---- polish: transitions, hover states, post grid ---- */
+  .card{transition:border-color .3s ease}
+  .dial-row{margin:0 -8px;padding-left:8px;padding-right:8px;border-radius:9px;transition:background .18s ease}
+  .dial-row:hover{background:#1b2027}
+  .refrow{margin:0 -6px;padding-left:6px;padding-right:6px;border-radius:8px;transition:background .18s ease}
+  .refrow:hover{background:#1b2027}
+  .mtile{transition:border-color .2s ease,background .2s ease}
+  .mtile:hover{border-color:#333a45;background:#232935}
+  .calrow{transition:background .15s ease}
+  .calrow:hover{background:rgba(110,168,254,.05)}
+  button{transition:background .18s ease,border-color .18s ease,color .18s ease}
+  .poststrip{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+  .poststrip>div{transition:border-color .2s ease}
+  .poststrip>div:hover{border-color:#333a45}
+  .tm-nav:active{transform:scale(.92)}
+  a{color:var(--accent)}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;transition:none!important}}
+
   /* ---- responsive: collapse to single column / phone sizes ---- */
   @media(max-width:820px){
     .stage{padding:18px 12px 40px}
+    .wrap{gap:16px}
     .cols{flex-direction:column}
-    .card{padding:17px 18px}
+    .card{padding:16px 16px}
     .verdict{font-size:17px}
     .zoneName{font-size:30px}
     .zl{font-size:8px;letter-spacing:0;text-transform:none}
     .ticks{display:none}
-    .brand h1{font-size:26px}
+    .brand h1{font-size:25px}
+    .mast{gap:14px}
     .hide-sm{display:none}
+    .dial-row{gap:8px}
+    .dial-label{min-width:64px}
+    .dial-read{min-width:96px}
     .dial-mean{padding-left:0}
     .expand{padding-left:0}
+    .poststrip{grid-template-columns:1fr}
+    .mgrid{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -293,8 +318,11 @@ if(window.COCKPIT_LIVE){
 }
 
 /* ============================ STATE ============================ */
-const S={readId:'live',expanded:null,pop:null,showRules:false};
+const S={readId:'live',expanded:null,pop:null,showRules:false,
+  studio:{thread:true,signals:false,combos:false}};
+let MOUNTED=false;
 const read=()=>READS.find(r=>r.id===S.readId)||READS[0];
+function toggleStudio(k){S.studio[k]=!S.studio[k];render();}
 function setRead(id){S.readId=id;S.expanded=null;S.pop=null;render();}
 function step(d){const i=ORDER.indexOf(S.readId);S.readId=ORDER[Math.max(0,Math.min(ORDER.length-1,i+d))];S.expanded=null;S.pop=null;render();}
 function toggleDial(k){S.expanded=S.expanded===k?null:k;S.pop=null;render();}
@@ -582,22 +610,31 @@ function postsPanel(r){
       <div style="font:13px/1.55 'Inter';color:#C6CCD3;white-space:pre-wrap">${text}</div>
     </div>`;
   };
+  const grid=inner=>`<div class="poststrip">${inner}</div>`;
+  const section=(key,label,count,inner)=>{
+    const open=S.studio[key];
+    return `<div style="border-top:1px solid var(--border2)">
+      <div onclick="toggleStudio('${key}')" style="display:flex;align-items:center;gap:9px;padding:13px 2px 12px;cursor:pointer;user-select:none">
+        <span class="chev" style="transform:rotate(${open?90:0}deg);color:var(--faint2);font-size:11px">▸</span>
+        <span class="sect" style="font-size:10px">${label}</span>
+        <span style="font:10px 'JetBrains Mono',monospace;color:#586170">${count}</span>
+      </div>
+      ${open?`<div style="padding:0 0 16px;animation:expandIn .3s ease both">${grid(inner)}</div>`:''}
+    </div>`;
+  };
   const thread=P.thread.map((t,i)=>card('thread',i,`thread ${i+1}/${P.thread.length}`,t)).join('');
   const signals=P.signals.map((p,i)=>card('signals',i,p.name,p.text)).join('');
   const combos=P.combos.length?P.combos.map((p,i)=>card('combos',i,'⚡ '+p.name,p.text)).join('')
-    :`<div style="font:italic 400 12px 'Inter';color:var(--faint2)">No combo conditions met this week — combos fire only when related signals line up.</div>`;
+    :`<div style="font:italic 400 12px 'Inter';color:var(--faint2);padding:4px 2px">No combo conditions met this week — combos fire only when related signals line up.</div>`;
   return `<div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px">
       <span class="sect">Post studio <span style="color:#454b55">· drafts from the live read</span></span>
       <span style="font:10px 'JetBrains Mono',monospace;color:#586170">gate-checked · nothing auto-posts</span>
     </div>
-    <div style="font:italic 400 11px/1.5 'Inter';color:var(--faint2);margin-bottom:12px">Regenerated with each data refresh — when the panel changes materially, so do these. Edit before posting.</div>
-    <div class="sect" style="font-size:9.5px;margin-bottom:8px">The weekly thread</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px">${thread}</div>
-    <div class="sect" style="font-size:9.5px;margin:16px 0 8px">Single-signal posts</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px">${signals}</div>
-    <div class="sect" style="font-size:9.5px;margin:16px 0 8px">Combo posts · fired by current conditions</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px">${combos}</div>
+    <div style="font:italic 400 11px/1.5 'Inter';color:var(--faint2);margin-bottom:6px">Regenerated with each data refresh — when the panel changes materially, so do these. Edit before posting.</div>
+    ${section('thread','The weekly thread',`${P.thread.length} posts`,thread)}
+    ${section('signals','Single-signal posts',`${P.signals.length} posts`,signals)}
+    ${section('combos','Combo posts · fired by current conditions',P.combos.length?`${P.combos.length} live`:'none this week',combos)}
   </div>`;
 }
 
@@ -625,12 +662,17 @@ function masthead(r){const zone=zoneOf(r.composite);return `<div class="mast">
 
 function render(){
   const r=read();
-  document.getElementById('app').innerHTML=
-    masthead(r)+timeMachine()+verdictPanel(r)+
+  const app=document.getElementById('app');
+  app.innerHTML=
+    masthead(r)+verdictPanel(r)+timeMachine()+
     `<div class="cols"><div class="col">${macroPanel(r)}${dialsPanel(r)}</div><div class="col">${narrativePanel(r)}${calibrationPanel(r)}</div></div>`+
     postsPanel(r)+
     mathsPanel()+
     `<div class="footer">Sources: Coin Metrics community · FRED · alternative.me. The composite reads as a zone, never a decimal. Historical calibration is a retrospective back-test; the live record began 2026-07-01. Context and education, not financial advice.</div>`;
+  if(!MOUNTED){  // subtle entrance — first paint only, so interactions don't re-animate
+    [...app.children].forEach((c,i)=>{c.style.animation='panelIn .55s cubic-bezier(.22,1,.36,1) both';c.style.animationDelay=(Math.min(i,7)*0.055)+'s';});
+    MOUNTED=true;
+  }
 }
 render();
 </script>
