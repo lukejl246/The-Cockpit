@@ -153,7 +153,7 @@ window.COCKPIT_LIVE = {
   "combos": [
    {
     "name": "Near, not at",
-    "text": "Disagreement · 2026-07-03\n\nComposite: bottoming band. But:\n· NUPL 0.14 reads 'hope' — the 3 pinned lows sat in capitulation (<0)\n· Puell 0.62 sits above the <0.5 band that held at all 3 lows\n\nNear the n=3 pinned-low profile, not at it. The gap is the read.\n\nState-read, not advice."
+    "text": "Disagreement · 2026-07-03\n\nComposite: bottoming band. But:\n· NUPL 0.14 reads 'hope' — the 3 pinned lows sat in capitulation (<0)\n· Puell 0.62 sits above the <0.5 band that held at all 3 lows\n\nNear the n=3 pinned-low profile, not at it — that's the read.\n\nState-read, not advice."
    }
   ]
  }
