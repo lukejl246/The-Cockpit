@@ -254,14 +254,14 @@ const REF={
     R('NUPL','0.12','hope','lags','pure transform of MVRV — display only, never composite'),
     R('Puell','0.66','mid, near bottom band','coincident','bottoms-only instrument — top band dead post-halvings'),
     R('Hash Ribbon','0.97','miner capitulation','confirms lows','event flag — false signals May/Jul 2025'),
-    R('SSR osc','−1.03','dry powder deep','leads','oscillator form — stables ≠ all BTC-bound'),
+    R('SSR osc','−1.03','reserves deep vs trend','leads','oscillator form — stables ≠ all BTC-bound'),
   ],
   t2013:[R('NUPL','0.79','euphoria','lags','display only'),R('Puell','8.22','top band (pre-decay)','coincident','bottoms-only now'),R('Hash Ribbon','1.28','expanding','confirms lows','event flag'),R('SSR osc','n/a','stables did not exist','leads','')],
-  t2017:[R('NUPL','0.77','euphoria','lags','display only'),R('Puell','6.35','top band (pre-decay)','coincident','bottoms-only now'),R('Hash Ribbon','1.11','expanding','confirms lows','event flag'),R('SSR osc','+1.50','dry powder thin','leads','oscillator form')],
+  t2017:[R('NUPL','0.77','euphoria','lags','display only'),R('Puell','6.35','top band (pre-decay)','coincident','bottoms-only now'),R('Hash Ribbon','1.11','expanding','confirms lows','event flag'),R('SSR osc','+1.50','reserves thin vs trend','leads','oscillator form')],
   t2021:[R('NUPL','0.65','belief','lags','display only'),R('Puell','1.47','mid — top band dead','coincident','bottoms-only now'),R('Hash Ribbon','1.05','normal','confirms lows','event flag'),R('SSR osc','+0.78','neutral','leads','oscillator form')],
   t2025:[R('NUPL','0.56','belief','lags','display only'),R('Puell','1.07','mid — top band dead','coincident','bottoms-only now'),R('Hash Ribbon','1.05','normal','confirms lows','event flag'),R('SSR osc','+0.34','neutral','leads','oscillator form')],
   b2015:[R('NUPL','−0.77','capitulation','lags','display only'),R('Puell','0.31','bottom band ✓','coincident','held at all 3 lows'),R('Hash Ribbon','1.02','normal','confirms lows','event flag'),R('SSR osc','n/a','stables too young','leads','')],
-  b2018:[R('NUPL','−0.45','capitulation','lags','display only'),R('Puell','0.39','bottom band ✓','coincident','held at all 3 lows'),R('Hash Ribbon','0.88','miner capitulation ✓','confirms lows','event flag'),R('SSR osc','−2.82','dry powder deep','leads','oscillator form')],
+  b2018:[R('NUPL','−0.45','capitulation','lags','display only'),R('Puell','0.39','bottom band ✓','coincident','held at all 3 lows'),R('Hash Ribbon','0.88','miner capitulation ✓','confirms lows','event flag'),R('SSR osc','−2.82','reserves deep vs trend','leads','oscillator form')],
   b2022:[R('NUPL','−0.29','capitulation','lags','display only'),R('Puell','0.43','bottom band ✓','coincident','held at all 3 lows'),R('Hash Ribbon','1.02','normal','confirms lows','event flag'),R('SSR osc','−0.94','loosening','leads','oscillator form')],
 };
 
@@ -451,6 +451,48 @@ function calibrationPanel(r){
   </div>`;
 }
 
+/* Phase 8 — Post studio: gated drafts shipped in the payload. Live read only.
+   Copy-to-clipboard; nothing auto-posts. */
+function copyPost(kind,idx,btn){
+  const P=window.COCKPIT_LIVE&&window.COCKPIT_LIVE.posts; if(!P)return;
+  const text = kind==='thread' ? P.thread[idx] : P[kind][idx].text;
+  navigator.clipboard.writeText(text).then(()=>{btn.textContent='copied ✓';setTimeout(()=>btn.textContent='copy',1400);});
+}
+function postsPanel(r){
+  const P=window.COCKPIT_LIVE&&window.COCKPIT_LIVE.posts;
+  if(r.id!=='live'||!P) return '';
+  const card=(kind,idx,title,text)=>{
+    const n=text.length, over=n>280;
+    return `<div style="padding:12px 14px;border-radius:11px;background:var(--panel3);border:1px solid var(--border2);display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <span style="font:600 10px 'Inter';letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">${title}</span>
+        <span style="display:flex;align-items:center;gap:8px">
+          <span style="font:10px 'JetBrains Mono',monospace;color:${over?'#E8A13A':'#586170'}">${n}/280</span>
+          <button onclick="copyPost('${kind}',${idx},this)" style="cursor:pointer;font:600 10px 'Inter';color:var(--muted);background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:3px 9px">copy</button>
+        </span>
+      </div>
+      <div style="font:13px/1.55 'Inter';color:#C6CCD3;white-space:pre-wrap">${text}</div>
+    </div>`;
+  };
+  const thread=P.thread.map((t,i)=>card('thread',i,`thread ${i+1}/${P.thread.length}`,t)).join('');
+  const signals=P.signals.map((p,i)=>card('signals',i,p.name,p.text)).join('');
+  const combos=P.combos.length?P.combos.map((p,i)=>card('combos',i,'⚡ '+p.name,p.text)).join('')
+    :`<div style="font:italic 400 12px 'Inter';color:var(--faint2)">No combo conditions met this week — combos fire only when related signals line up.</div>`;
+  return `<div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px">
+      <span class="sect">Post studio <span style="color:#454b55">· drafts from the live read</span></span>
+      <span style="font:10px 'JetBrains Mono',monospace;color:#586170">gate-checked · nothing auto-posts</span>
+    </div>
+    <div style="font:italic 400 11px/1.5 'Inter';color:var(--faint2);margin-bottom:12px">Regenerated with each data refresh — when the panel changes materially, so do these. Edit before posting.</div>
+    <div class="sect" style="font-size:9.5px;margin-bottom:8px">The weekly thread</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px">${thread}</div>
+    <div class="sect" style="font-size:9.5px;margin:16px 0 8px">Single-signal posts</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px">${signals}</div>
+    <div class="sect" style="font-size:9.5px;margin:16px 0 8px">Combo posts · fired by current conditions</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px">${combos}</div>
+  </div>`;
+}
+
 function mathsPanel(){
   const row=(k,v)=>`<div style="display:flex;gap:12px;align-items:baseline;padding:8px 0;border-top:1px solid #20242b;flex-wrap:wrap">
     <span style="min-width:150px;font:600 11px 'Inter';color:var(--muted)">${k}</span>
@@ -478,6 +520,7 @@ function render(){
   document.getElementById('app').innerHTML=
     masthead(r)+timeMachine()+verdictPanel(r)+
     `<div class="cols"><div class="col">${macroPanel(r)}${dialsPanel(r)}</div><div class="col">${narrativePanel(r)}${calibrationPanel(r)}</div></div>`+
+    postsPanel(r)+
     mathsPanel()+
     `<div class="footer">Sources: Coin Metrics community · FRED · alternative.me. The composite reads as a zone, never a decimal. Historical calibration is a retrospective back-test; the live record began 2026-07-01. Context and education, not financial advice.</div>`;
 }
