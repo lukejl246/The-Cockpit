@@ -146,6 +146,13 @@
   .poststrip>div:hover{border-color:#333a45}
   .tm-nav:active{transform:scale(.92)}
   a{color:var(--accent)}
+  .modetog{display:inline-flex;border:1px solid var(--border);border-radius:9px;overflow:hidden;font:600 11px 'Inter';letter-spacing:.02em;user-select:none}
+  .modetog span{padding:6px 14px;cursor:pointer;color:var(--muted);transition:background .18s,color .18s}
+  .modetog span:hover{color:var(--text)}
+  .modetog span.on{background:var(--accent);color:#0B0D11}
+  .plainbox{margin:0 0 20px;padding:15px 17px;border-radius:12px;background:rgba(110,168,254,.07);border:1px solid rgba(110,168,254,.22);font:15px/1.6 'Inter';color:#D8DDE3}
+  .plainbox .lead{display:block;font:600 9.5px 'Inter';letter-spacing:.14em;text-transform:uppercase;color:#6EA8FE;margin-bottom:7px}
+  .plaindesc{font:italic 400 12px 'Inter';color:#8A93A0}
   @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;transition:none!important}}
 
   /* ---- responsive: collapse to single column / phone sizes ---- */
@@ -188,6 +195,32 @@ const TTXT={mechanism:'MECHANISM',base:'BASE RATE',story:'STORY'};
 const TDEF={mechanism:'Why it should work — a causal chain. The strongest tier; it survives regime change.',base:'In n prior instances of this state, an outcome followed. Strong, but capped by the tiny sample.',story:'“This looks like …”. The weakest, most seductive tier — colour only, always labelled a story.'};
 const DET={trend:'Log-regression channel position (0 = historic bottom band, 1 = top band).',valuation:'MVRV = market value ÷ realized value. Above 1 = aggregate in profit; below 1 = underwater.',sentiment:'Weekly RSI(14) plus the Fear & Greed index (0 = extreme fear, 100 = extreme greed).',dominance:'BTC dominance — Bitcoin’s share of total crypto market cap. The rotation tell.'};
 const CAV={trend:'Bands fit to ~3–4 cycles — a small sample.',valuation:'MVRV-Z thresholds drift down each cycle — flag it, never hard-band.',sentiment:'Fear & Greed only exists from Feb 2018; earlier pivots are n/a.',dominance:'Not part of the Phase-1 backfill — a mechanism read on a short history.'};
+
+/* ---- Simple mode: plain-English glosses (crypto-literate, not kiddified) ---- */
+const PLAIN_DIAL={
+  trend:'How cheap or pricey BTC is vs its long-term average',
+  valuation:'Whether holders overall are in profit or underwater',
+  sentiment:'How fearful or greedy the crowd is right now',
+  dominance:'Bitcoin’s share of the market vs altcoins'};
+const PLAIN_REF={
+  'NUPL':'Are holders in profit overall?','Puell':'Are miners making money?',
+  'Hash Ribbon':'Are miners stressed / capitulating?','SSR osc':'How much sideline stablecoin cash is waiting?',
+  'BMSB':'The line separating bull and bear trends','Funding':'How hot is leverage / speculation?',
+  'OI (Binance)':'How big are futures bets right now?','OI / mcap':'Futures bet size vs the whole market'};
+const PLAIN_MACRO={
+  'Net liquidity':'Money sloshing in the financial system','USD index':'How strong the US dollar is',
+  'Real 10y':'The real cost of money','Fed stance':'Which way the central bank is leaning'};
+const PLAIN_ZONE={
+  bottoming:'historically cheap and out of favour — like past cycle lows',
+  accumulation:'still cheap and quietly rebuilding, off the lows',
+  'mid-cycle':'fairly valued — not cheap, not stretched',
+  elevated:'running hot — stretched above trend, getting late-cycle',
+  euphoria:'euphoric — about as stretched as past cycle tops'};
+const PLAIN_MSTATE={tailwind:'helping risk assets (a tailwind)',neutral:'neutral',headwind:'working against risk assets (a headwind)'};
+function plainSummary(r){
+  const zone=zoneOf(r.composite),m=r.macro;
+  return `<b style="color:${ZC[zone]};text-transform:capitalize">${zone}</b> — ${PLAIN_ZONE[zone]||''}. The macro backdrop (rates, liquidity, the Fed) is <b>${PLAIN_MSTATE[m.state]}</b>.${r.div.on?' Watch-out: price has run ahead of the on-chain data (a divergence).':''}`;
+}
 function zoneOf(c){let n=0;for(const x of CUTS){if(c>=x)n++;}return ZONES[n];}
 function rgba(hex,a){const h=hex.replace('#','');return 'rgba('+parseInt(h.slice(0,2),16)+','+parseInt(h.slice(2,4),16)+','+parseInt(h.slice(4,6),16)+','+a+')';}
 function D(key,label,reading,dir,meaning,post,tier,n,na){return {key,label,reading,dir,meaning,post,tier,n,detail:DET[key],caveat:CAV[key],na:!!na};}
@@ -328,7 +361,9 @@ if(window.COCKPIT_LIVE){
 }
 
 /* ============================ STATE ============================ */
+let SIMPLE_PREF='simple'; try{SIMPLE_PREF=localStorage.getItem('cockpitMode')||'simple';}catch(e){}
 const S={readId:'live',expanded:null,pop:null,showRules:false,scrub:null,
+  simple:SIMPLE_PREF!=='detailed',
   studio:{thread:true,signals:false,combos:false}};
 let MOUNTED=false;
 const read=()=>S.scrub!=null?computedRead(S.scrub):(READS.find(r=>r.id===S.readId)||READS[0]);
@@ -340,6 +375,7 @@ function exitScrub(){setRead('live');}
 function toggleDial(k){S.expanded=S.expanded===k?null:k;S.pop=null;render();}
 function toggleTier(k,e){if(e)e.stopPropagation();S.pop=S.pop===k?null:k;render();}
 function toggleRules(){S.showRules=!S.showRules;render();}
+function toggleSimple(v){S.simple=v;try{localStorage.setItem('cockpitMode',v?'simple':'detailed');}catch(e){}render();}
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
 /* ============================ RENDER ============================ */
@@ -529,11 +565,12 @@ function verdictPanel(r){
         <span class="qbtn" onclick="toggleRules()" title="Rules of Evidence">?</span>
       </div>
     </div>
+    ${S.simple?`<div class="plainbox"><span class="lead">The simple read</span>${plainSummary(r)}</div>`:''}
     <p class="verdict">${esc(r.verdict)}</p>
     <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
       <div style="display:flex;align-items:flex-end;gap:15px">
         <div class="zoneName" style="color:${zColor};text-shadow:0 0 34px ${rgba(zColor,.3)}">${zone.toUpperCase()}</div>
-        ${(location.hostname==='localhost'||location.hostname==='127.0.0.1')?`<div style="font:10.5px/1.5 'JetBrains Mono',monospace;color:#586170;padding-bottom:7px">composite<br><span style="color:#99A1AC;font-size:13px">${r.composite.toFixed(2)}</span> · internal</div>`:''}
+        ${(!S.simple&&(location.hostname==='localhost'||location.hostname==='127.0.0.1'))?`<div style="font:10.5px/1.5 'JetBrains Mono',monospace;color:#586170;padding-bottom:7px">composite<br><span style="color:#99A1AC;font-size:13px">${r.composite.toFixed(2)}</span> · internal</div>`:''}
       </div>
       ${r.div.on?`<div class="divchip"><span class="divsq"></span><span style="font:600 11px 'Inter';letter-spacing:.04em;color:#D9BEF2">DIVERGENCE ON</span></div>`:''}
     </div>
@@ -543,6 +580,8 @@ function verdictPanel(r){
       <div class="zlabels">${zlabels}</div>
       ${(()=>{const RL=r.rel||REL[r.id];if(!RL)return '';
         const dis=(r.composite>=0.6)!==(RL.pct>=0.6)&&Math.abs(r.composite-RL.pct)>0.25;
+        if(S.simple){const near=RL.pct<.34?'near the bottom of':RL.pct<.66?'mid-range within':'near the top of';
+          return `<div style="margin-top:12px;font:12px/1.5 'Inter';color:#8A93A0">Vs its own last 4 years, BTC sits <b style="color:#C6CCD3">${near}</b> that range${dis?` — <b style="color:#E8A13A">though the two views disagree</b>, worth noting`:''}.</div>`;}
         return `<div style="margin-top:12px;font:11px 'JetBrains Mono',monospace;color:#586170">relative lens (4y pctile): <span style="color:#99A1AC">${RL.band.toUpperCase()} ${RL.pct.toFixed(2)}</span> · ${dis?`<span style="color:#E8A13A;font-weight:600">LENSES DISAGREE</span>`:`lenses agree`}</div>`;})()}
     </div>
     <div class="vmeta"><span>${r.date}</span><span class="vsep"></span><span class="pill">method v1.0</span><span class="vsep"></span><span>BTC <span style="color:#E9ECEF">${r.price}</span></span></div>
@@ -566,14 +605,14 @@ function macroPanel(r){
     {label:'USD index',value:m.dxy,sub:'',tip:'Broad dollar index (a DXY proxy). A stronger dollar is typically a headwind for BTC.'},
     {label:'Real 10y',value:m.real10y,sub:'',tip:'10-year TIPS yield — the real cost of money. Higher real yields pull liquidity out of risk.'},
     {label:'Fed stance',value:m.fed,sub:'',tip:'Direction of the Fed funds target vs ~6 months prior: hiking, cutting, or hold.'},
-  ].map(t=>`<div class="mtile"><div class="lbl">${t.label}<span style="opacity:.5;font-size:9px">ⓘ</span></div><div class="val">${t.value}${t.sub?`<span class="sub"> ${t.sub}</span>`:''}</div><div class="tip">${t.tip}</div></div>`).join('');
+  ].map(t=>`<div class="mtile"><div class="lbl">${S.simple?(PLAIN_MACRO[t.label]||t.label):t.label}<span style="opacity:.5;font-size:9px">ⓘ</span></div><div class="val">${t.value}${t.sub?`<span class="sub"> ${t.sub}</span>`:''}</div><div class="tip">${t.tip}</div></div>`).join('');
   return `<div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px">
       <span class="sect">Macro backdrop <span class="llchip" style="margin-left:6px">leads</span></span>
       <span class="mstate" style="background:${rgba(col,.12)};border:1px solid ${rgba(col,.45)}"><span style="font:600 11px 'Inter';letter-spacing:.06em;color:${col}">${m.state.toUpperCase()}</span><span style="font-size:12px;color:${col}">${MARR[m.state]}</span></span>
     </div>
     <div class="mgrid">${tiles}</div>
-    <div style="margin-top:13px;font:italic 400 12px/1.5 'Inter';color:#6B7280">Derived 3-state — reads <em>beside</em> the composite, never folded into it.</div>
+    <div style="margin-top:13px;font:italic 400 12px/1.5 'Inter';color:#6B7280">${S.simple?'The big-money backdrop — read alongside the gauges, not mixed into them.':'Derived 3-state — reads <em>beside</em> the composite, never folded into it.'}</div>
   </div>`;
 }
 
@@ -589,14 +628,14 @@ function dialsPanel(r){
         <div class="dial-read"><span class="r" style="color:${d.na?'#586170':'#E9ECEF'}">${esc(d.reading)}</span><span style="font-size:12px;color:#6B7280">${ARR[d.dir]}</span><div class="dtip">${d.detail}</div></div>
         <div style="flex:1;min-width:0"></div>
         <div style="position:relative;display:flex;align-items:center;gap:9px">
-          <span class="tier" style="color:${tierColor};border:${tierBorder};font-weight:${tierWeight};font-style:${d.tier==='story'?'italic':'normal'}" onclick="toggleTier('${d.key}',event)">${TTXT[d.tier]}</span>
+          ${S.simple?'':`<span class="tier" style="color:${tierColor};border:${tierBorder};font-weight:${tierWeight};font-style:${d.tier==='story'?'italic':'normal'}" onclick="toggleTier('${d.key}',event)">${TTXT[d.tier]}</span>
           <span class="dial-n">${d.n}</span>
-          <span class="llchip">${LL[d.key]||''}</span>
+          <span class="llchip">${LL[d.key]||''}</span>`}
           <span class="chev" style="transform:${exp?'rotate(180deg)':'rotate(0deg)'}">▾</span>
           ${pop?`<div class="pop"><div style="font:600 9.5px 'Inter';letter-spacing:.08em;color:#8A93A0;margin-bottom:7px">EVIDENCE · ${TTXT[d.tier]}</div><div style="font:12.5px/1.5 'Inter';color:#C6CCD3;margin-bottom:9px">${TDEF[d.tier]}</div><div style="padding-top:9px;border-top:1px solid #23272F;font:italic 400 12px/1.45 'Inter';color:#8A93A0">Caveat — ${d.caveat}</div></div>`:''}
         </div>
       </div>
-      <div class="dial-mean">${esc(d.meaning)}</div>
+      <div class="dial-mean">${S.simple&&PLAIN_DIAL[d.key]?`${PLAIN_DIAL[d.key]}. <span style="color:#C6CCD3">${esc(d.meaning)}</span>`:esc(d.meaning)}</div>
       ${exp?`<div class="expand" style="animation:expandIn .32s cubic-bezier(.22,1,.36,1) both"><div class="inner">
         <div style="font:600 9.5px 'Inter';letter-spacing:.1em;text-transform:uppercase;color:#586170;margin-bottom:7px">Post angle — the teachable line</div>
         <p class="post">“${esc(d.post||d.meaning)}”</p>
@@ -604,14 +643,21 @@ function dialsPanel(r){
         <div style="margin-top:9px;padding-top:10px;border-top:1px solid #23272F;font:italic 400 11.5px/1.45 'Inter';color:#6B7280">Caveat — ${d.caveat}</div>
       </div></div>`:''}
     </div>`;}).join('');
-  const ref=(r.ref||REF[r.id]||[]).map(x=>`<div class="refrow">
+  const ref=(r.ref||REF[r.id]||[]).map(x=>S.simple
+    ? `<div style="padding:9px 0;border-top:1px solid #20242b">
+         <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+           <span style="font:600 12.5px 'Inter';color:#C6CCD3">${PLAIN_REF[x.name]||x.name}</span>
+           <span style="font:12px 'JetBrains Mono',monospace;color:#E9ECEF;white-space:nowrap">${x.reading}</span></div>
+         <div style="font:12px 'Inter';color:#8A93A0;margin-top:2px">${x.state}</div>
+       </div>`
+    : `<div class="refrow">
       <span class="refname">${x.name}</span><span class="refread">${x.reading}</span>
       <span class="refstate">${x.state}</span><span class="llchip">${x.ll}</span>
       ${x.note?`<span class="refnote">${x.note}</span>`:''}
     </div>`).join('');
-  const refBlock=ref?`<div class="sect" style="margin:18px 0 4px">Reference layer · vetted instruments</div>
-    <div style="font:italic 400 11px/1.4 'Inter';color:var(--faint2);margin-bottom:4px">Consulted, not stared at — verdicts ride on each row. Vetted out: Pi Cycle (data-mined; no fire 2025), active addresses (decoupled).</div>${ref}`:'';
-  return `<div class="card"><div class="sect" style="margin-bottom:6px">BTC-native dials</div>${rows}${refBlock}</div>`;
+  const refBlock=ref?`<div class="sect" style="margin:18px 0 4px">${S.simple?'Supporting signals · plain English':'Reference layer · vetted instruments'}</div>
+    ${S.simple?'':`<div style="font:italic 400 11px/1.4 'Inter';color:var(--faint2);margin-bottom:4px">Consulted, not stared at — verdicts ride on each row. Vetted out: Pi Cycle (data-mined; no fire 2025), active addresses (decoupled).</div>`}${ref}`:'';
+  return `<div class="card"><div class="sect" style="margin-bottom:6px">${S.simple?'The main gauges':'BTC-native dials'}</div>${rows}${refBlock}</div>`;
 }
 
 function narrativePanel(r){
@@ -704,9 +750,14 @@ function mathsPanel(){
   </div>`;
 }
 
+function modeToggle(){return `<div class="modetog">
+  <span onclick="toggleSimple(true)" class="${S.simple?'on':''}">Simple</span>
+  <span onclick="toggleSimple(false)" class="${S.simple?'':'on'}">Detailed</span>
+</div>`;}
 function masthead(r){const zone=zoneOf(r.composite);return `<div class="mast">
   <div><div class="brand"><h1 class="serif">The Cockpit</h1><span class="badge">private</span></div>
-  <div class="tag">A private Bitcoin cycle-reading dashboard · reading the tide, not calling the top</div></div>
+  <div class="tag">A private Bitcoin cycle-reading dashboard · reading the tide, not calling the top</div>
+  <div style="margin-top:10px">${modeToggle()}</div></div>
   <div style="text-align:right"><div class="nowlbl">Now reading</div>
     <div style="display:flex;align-items:center;gap:9px;justify-content:flex-end;margin-top:6px"><span style="width:9px;height:9px;border-radius:50%;background:${ZC[zone]};box-shadow:0 0 10px ${ZC[zone]}"></span><span style="font:14px 'JetBrains Mono',monospace">${r.label}</span></div>
     <div style="font:11px 'JetBrains Mono',monospace;color:#6B7280;margin-top:4px">${r.date} · ${zone.toUpperCase()} · BTC ${r.price}</div>
@@ -716,11 +767,13 @@ function masthead(r){const zone=zoneOf(r.composite);return `<div class="mast">
 function render(){
   const r=read();
   const app=document.getElementById('app');
+  const rightCol=S.simple?narrativePanel(r):narrativePanel(r)+calibrationPanel(r);
+  const below=S.simple?'':postsPanel(r)+mathsPanel();
   app.innerHTML=
     masthead(r)+verdictPanel(r)+timeMachine()+
-    `<div class="cols"><div class="col">${macroPanel(r)}${dialsPanel(r)}</div><div class="col">${narrativePanel(r)}${calibrationPanel(r)}</div></div>`+
-    postsPanel(r)+
-    mathsPanel()+
+    `<div class="cols"><div class="col">${macroPanel(r)}${dialsPanel(r)}</div><div class="col">${rightCol}</div></div>`+
+    below+
+    (S.simple?`<div style="font:12px/1.6 'Inter';color:var(--faint2);text-align:center;padding-top:6px">Switch to <b>Detailed</b> (top-left) for the evidence tiers, sample sizes, post drafts and calibration record.</div>`:'')+
     `<div class="footer">Sources: Coin Metrics community · FRED · alternative.me. The composite reads as a zone, never a decimal. Historical calibration is a retrospective back-test; the live record began 2026-07-01. Context and education, not financial advice.</div>`;
   if(!MOUNTED){  // subtle entrance — first paint only, so interactions don't re-animate
     [...app.children].forEach((c,i)=>{c.style.animation='panelIn .55s cubic-bezier(.22,1,.36,1) both';c.style.animationDelay=(Math.min(i,7)*0.055)+'s';});
