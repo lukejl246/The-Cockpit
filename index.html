@@ -306,6 +306,16 @@ const BMSB={live:['below −16%','bear regime'],
   b2022:['below −25%','bear regime']};
 Object.keys(REF).forEach(id=>{ if(BMSB[id]) REF[id].push(R('BMSB',BMSB[id][0],BMSB[id][1],'coincident','trend-regime gate — 20W SMA + 21W EMA')); });
 
+/* Positioning (OI + funding) from the backfill — the three pivots that have it.
+   Funding is the live froth gauge; OI is total-futures ÷ mcap (CoinGlass, approx). */
+[['t2021','+44.5%/yr','~1.9%','frothy — retail leverage'],
+ ['b2022','+0.4%/yr','~3.0%','deleveraged — no froth'],
+ ['t2025','+9.1%/yr','~3.4%','big OI, calm funding = basis trades']].forEach(([id,f,oi,st])=>{
+  if(!REF[id])return;
+  REF[id].push(R('Funding',f,st,'coincident','perp funding annualized — leverage-froth gauge'));
+  REF[id].push(R('OI / mcap',oi,'total futures','coincident','open interest ÷ market cap (CoinGlass, approx)'));
+});
+
 if(window.COCKPIT_LIVE){
   const L=window.COCKPIT_LIVE, i=READS.findIndex(r=>r.id==='live');
   READS[i]=Object.assign({},READS[i],{
@@ -318,13 +328,15 @@ if(window.COCKPIT_LIVE){
 }
 
 /* ============================ STATE ============================ */
-const S={readId:'live',expanded:null,pop:null,showRules:false,
+const S={readId:'live',expanded:null,pop:null,showRules:false,scrub:null,
   studio:{thread:true,signals:false,combos:false}};
 let MOUNTED=false;
-const read=()=>READS.find(r=>r.id===S.readId)||READS[0];
+const read=()=>S.scrub!=null?computedRead(S.scrub):(READS.find(r=>r.id===S.readId)||READS[0]);
 function toggleStudio(k){S.studio[k]=!S.studio[k];render();}
-function setRead(id){S.readId=id;S.expanded=null;S.pop=null;render();}
-function step(d){const i=ORDER.indexOf(S.readId);S.readId=ORDER[Math.max(0,Math.min(ORDER.length-1,i+d))];S.expanded=null;S.pop=null;render();}
+function setRead(id){S.scrub=null;S.readId=id;S.expanded=null;S.pop=null;if(typeof PIVW!=='undefined'&&PIVW&&PIVW[id]!=null)SCRUB=PIVW[id];render();}
+function step(d){S.scrub=null;const i=ORDER.indexOf(S.readId);S.readId=ORDER[Math.max(0,Math.min(ORDER.length-1,i+d))];S.expanded=null;S.pop=null;if(PIVW&&PIVW[S.readId]!=null)SCRUB=PIVW[S.readId];render();}
+function tmCommit(){if(!HIST)return;S.scrub=SCRUB;S.expanded=null;S.pop=null;render();}
+function exitScrub(){setRead('live');}
 function toggleDial(k){S.expanded=S.expanded===k?null:k;S.pop=null;render();}
 function toggleTier(k,e){if(e)e.stopPropagation();S.pop=S.pop===k?null:k;render();}
 function toggleRules(){S.showRules=!S.showRules;render();}
@@ -388,6 +400,47 @@ function tmScrub(e){
   if(dot) dot.style.top=(tmY(HIST.weeks[SCRUB][1])-4)+'px';
   if(out) out.innerHTML=tmReadout(SCRUB);
 }
+/* Phase 9 — client-side prose generation for scrubbed weeks (ports publish_web
+   phrase tables). Curated reads (Live + 7 pivots) keep their authored prose;
+   any other week gets these generated meanings, computed from the enriched history. */
+function trendPhrase(c){return c<.2?["deep below the long-term mean","stretched down — the zone that preceded prior lows"]:c<.4?["below the long-term mean","cheap vs trend historically"]:c<.6?["near the long-term mean","mid-channel — neither cheap nor stretched"]:c<.8?["well above the mean","stretched up, short of prior blow-offs"]:["at the top of the channel","as stretched vs trend as price has ever been"];}
+function valPhrase(m){return m<1?["underwater vs cost basis","market below what it paid — capitulation zone"]:m<1.5?["barely above cost basis","holders near break-even, not euphoric"]:m<2.5?["above cost basis","in profit but shy of past extremes"]:m<3.5?["richly valued","late-cycle territory at past tops"]:["extreme premium to cost basis","historically top territory"];}
+function sentClass(r){return r==null?"momentum untracked":r<40?"momentum cold":r<60?"momentum neutral":"momentum hot";}
+function sentPhrase(r){const m=sentClass(r);return [m,`${m} on the weekly — compare the past lows and tops`];}
+function nuplZone(n){return n<0?"capitulation":n<.25?"hope":n<.5?"optimism":n<.75?"belief":"euphoria";}
+function puellZone(p){return p<.5?"bottom band ✓":p<.8?"mid, near bottom band":"mid — top band dead";}
+function ssrState(o){return o<-1?"reserves deep vs trend":o<0?"loosening":o<1?"neutral":"reserves thin vs trend";}
+const MACRO_P={tailwind:'a tailwind',neutral:'neutral',headwind:'a headwind'};
+const VERDICT_T={bottoming:"Bottoming — in the composite band that marked the 2015 / 2018 / 2022 lows (n=3), {s}, macro {m}. {d}",accumulation:"Accumulation — off the lows but still below the long-term mean (bottoms n=3), {s}, macro {m}. {d}","mid-cycle":"Mid-cycle — neither cheap nor stretched (tops n=4 · bottoms n=3), {s}, macro {m}. {d}",elevated:"Elevated — stretched above trend, short of past blow-offs (tops n=4), {s}, macro {m}. {d}",euphoria:"Euphoria — in the band that marked the 2013 / 2017 tops (n=4), {s}, macro {m}. {d}"};
+function macroStateOf(nlt,fed){const sc=(nlt||0)+(fed||0);return sc>0?"tailwind":sc<0?"headwind":"neutral";}
+function verdictLine(zone,ms,sbit,div){const d=div?"Divergence: price ahead of on-chain valuation.":"No price/valuation divergence.";return VERDICT_T[zone].replace('{s}',sbit).replace('{m}',MACRO_P[ms]).replace('{d}',d);}
+
+function computedRead(i){
+  const w=HIST.weeks[i], F=HIST.fields, get=f=>w[F.indexOf(f)];
+  const prev=i>0?HIST.weeks[i-1]:null, pget=f=>prev?prev[F.indexOf(f)]:null;
+  const A=(c,p,tol)=>(p==null||c==null)?'flat':(c>p+tol?'up':c<p-tol?'down':'flat');
+  const comp=get('comp'), zone=zoneOf(comp), chan=get('chan'), mvrv=get('mvrv'), rsi=get('rsi');
+  const t=chan!=null?[chan.toFixed(2),A(chan,pget('chan'),.004),...trendPhrase(chan)]:null;
+  const v=mvrv!=null?['MVRV '+mvrv.toFixed(2),A(mvrv,pget('mvrv'),.01),...valPhrase(mvrv)]:null;
+  const s=rsi!=null?['RSI '+Math.round(rsi),A(rsi,pget('rsi'),.25),...sentPhrase(rsi)]:null;
+  const nlt=get('nlt'), fed=get('fed'), ms=macroStateOf(nlt,fed);
+  const macro={state:ms,netLiq:'$'+(get('netliq')!=null?get('netliq').toFixed(2):'?')+'T',netLiqTrend:nlt==1?'rising':nlt==-1?'falling':'flat',dxy:get('dxy')!=null?String(get('dxy')):'n/a',real10y:get('real10y')!=null?get('real10y').toFixed(2)+'%':'n/a',fed:fed==-1?'hiking':fed==1?'cutting':'hold'};
+  const nupl=get('nupl'),puell=get('puell'),ribbon=get('ribbon'),ssr=get('ssr'),bmsb=get('bmsb'),ref=[];
+  if(nupl!=null)ref.push(R('NUPL',nupl.toFixed(2),nuplZone(nupl),'lags','transform of MVRV — display only'));
+  if(puell!=null)ref.push(R('Puell',puell.toFixed(2),puellZone(puell),'coincident','bottoms-only instrument'));
+  if(ribbon!=null)ref.push(R('Hash Ribbon',ribbon.toFixed(2),ribbon<1?'miner capitulation':'normal','confirms lows','event flag — false signals known'));
+  if(ssr!=null)ref.push(R('SSR osc',(ssr>=0?'+':'')+ssr.toFixed(2),ssrState(ssr),'leads','oscillator form'));
+  if(bmsb!=null)ref.push(R('BMSB',bmsb==2?'above band':bmsb==0?'below band':'inside',bmsb==2?'bull regime':bmsb==0?'bear regime':'contested','coincident','20W SMA + 21W EMA gate'));
+  const narrative=[];
+  if(prev){narrative.push({dir:A(comp,pget('comp'),.004),text:`Composite ${pget('comp').toFixed(2)} → ${comp.toFixed(2)} (${zoneOf(pget('comp'))===zone?'still ':'now '}${zone}).`});
+    if(mvrv!=null&&pget('mvrv')!=null)narrative.push({dir:A(mvrv,pget('mvrv'),.01),text:`MVRV ${pget('mvrv').toFixed(2)} → ${mvrv.toFixed(2)}.`});
+    narrative.push({dir:nlt==1?'up':nlt==-1?'down':'flat',text:`Net liquidity ${macro.netLiq} and ${macro.netLiqTrend}.`});}
+  const rel=get('rel');
+  return {id:'scrub',label:'week of '+w[0],date:w[0],price:'$'+Math.round(get('px')).toLocaleString(),
+    composite:comp,verdict:verdictLine(zone,ms,sentClass(rsi),get('div')==1),div:{on:get('div')==1},
+    macro,dials:mkdials(t,v,s,null),ref,rel:rel!=null?{pct:rel,band:relBandOf(rel)}:null,narrative,scrub:true};
+}
+
 function timeMachine(){
   if(!HIST) return timeMachineWave();
   tmIndex();
@@ -414,19 +467,19 @@ function timeMachine(){
   const dots=Object.entries(PIVW).map(([id,i])=>{
     const r=READS.find(x=>x.id===id); if(!r||i<0) return '';
     const col=ZC[zoneOf(r.composite)], sel=id===S.readId;
-    return `<span onclick="setRead('${id}')" title="${r.label}" style="position:absolute;left:${(i/(N-1)*100)}%;top:${tmY(HIST.weeks[i][1])-(sel?7:5)}px;transform:translateX(-50%);width:${sel?14:10}px;height:${sel?14:10}px;border-radius:50%;background:${col};cursor:pointer;box-shadow:${sel?('0 0 0 3px '+rgba(col,.3)+',0 0 12px '+rgba(col,.7)):'0 0 0 2px #12151a'};z-index:3"></span>`;
+    return `<span onclick="setRead('${id}')" onpointerdown="event.stopPropagation()" title="${r.label}" style="position:absolute;left:${(i/(N-1)*100)}%;top:${tmY(HIST.weeks[i][1])-(sel?7:5)}px;transform:translateX(-50%);width:${sel?14:10}px;height:${sel?14:10}px;border-radius:50%;background:${col};cursor:pointer;box-shadow:${sel&&S.scrub==null?('0 0 0 3px '+rgba(col,.3)+',0 0 12px '+rgba(col,.7)):'0 0 0 2px #12151a'};z-index:3"></span>`;
   }).join('');
   const curX=(SCRUB/(N-1)*100)+'%', curY=tmY(HIST.weeks[SCRUB][1])-4;
   return `<div class="tm">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
       <span class="sect">Time machine · every week since ${HIST.weeks[0][0].slice(0,4)}</span>
       <div style="display:flex;align-items:center;gap:12px">
-        <span style="font:12px 'Inter';color:#6B7280" class="hide-sm">drag to scrub · click a dot to re-read that pivot</span>
+        ${S.scrub!=null?`<span onclick="exitScrub()" style="cursor:pointer;font:600 11px 'Inter';color:var(--accent);border:1px solid rgba(110,168,254,.4);border-radius:7px;padding:3px 10px">⟲ back to live</span>`:`<span style="font:12px 'Inter';color:#6B7280" class="hide-sm">drag to scrub · release to read that week · click a dot for a pivot</span>`}
         <div style="display:flex;gap:6px"><span class="tm-nav" onclick="step(-1)">◀</span><span class="tm-nav" onclick="step(1)">▶</span></div>
       </div>
     </div>
     <div id="tmplot" style="position:relative;height:150px;margin-top:10px;touch-action:none;cursor:crosshair"
-         onpointerdown="tmScrub(event)" onpointermove="if(event.buttons)tmScrub(event)">
+         onpointerdown="tmScrub(event)" onpointermove="if(event.buttons)tmScrub(event)" onpointerup="tmCommit()">
       <svg viewBox="0 0 1000 150" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">${halvings}${lines}</svg>
       ${hlabels}${dots}
       <div id="tmcur" style="position:absolute;top:0;bottom:0;left:${curX};width:0;pointer-events:none;z-index:2">
@@ -488,7 +541,7 @@ function verdictPanel(r){
       <div class="ticks">${ticks}</div>
       <div class="band"><div class="marker" style="left:${pct}%"><div class="halo"></div><div class="stem"></div><div class="knob" style="box-shadow:0 0 0 3px #181C22,0 0 0 4.5px ${rgba(zColor,.55)}"></div></div></div>
       <div class="zlabels">${zlabels}</div>
-      ${(()=>{const RL=REL[r.id];if(!RL)return '';
+      ${(()=>{const RL=r.rel||REL[r.id];if(!RL)return '';
         const dis=(r.composite>=0.6)!==(RL.pct>=0.6)&&Math.abs(r.composite-RL.pct)>0.25;
         return `<div style="margin-top:12px;font:11px 'JetBrains Mono',monospace;color:#586170">relative lens (4y pctile): <span style="color:#99A1AC">${RL.band.toUpperCase()} ${RL.pct.toFixed(2)}</span> · ${dis?`<span style="color:#E8A13A;font-weight:600">LENSES DISAGREE</span>`:`lenses agree`}</div>`;})()}
     </div>
@@ -551,7 +604,7 @@ function dialsPanel(r){
         <div style="margin-top:9px;padding-top:10px;border-top:1px solid #23272F;font:italic 400 11.5px/1.45 'Inter';color:#6B7280">Caveat — ${d.caveat}</div>
       </div></div>`:''}
     </div>`;}).join('');
-  const ref=(REF[r.id]||[]).map(x=>`<div class="refrow">
+  const ref=(r.ref||REF[r.id]||[]).map(x=>`<div class="refrow">
       <span class="refname">${x.name}</span><span class="refread">${x.reading}</span>
       <span class="refstate">${x.state}</span><span class="llchip">${x.ll}</span>
       ${x.note?`<span class="refnote">${x.note}</span>`:''}
