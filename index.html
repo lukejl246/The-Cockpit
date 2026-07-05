@@ -364,7 +364,7 @@ if(window.COCKPIT_LIVE){
 let SIMPLE_PREF='simple'; try{SIMPLE_PREF=localStorage.getItem('cockpitMode')||'simple';}catch(e){}
 const S={readId:'live',expanded:null,pop:null,showRules:false,scrub:null,
   simple:SIMPLE_PREF!=='detailed',
-  studio:{thread:true,signals:false,combos:false}};
+  studio:{thread:true,signals:false,combos:false},radarOpen:{}};
 let MOUNTED=false;
 const read=()=>S.scrub!=null?computedRead(S.scrub):(READS.find(r=>r.id===S.readId)||READS[0]);
 function toggleStudio(k){S.studio[k]=!S.studio[k];render();}
@@ -376,6 +376,12 @@ function toggleDial(k){S.expanded=S.expanded===k?null:k;S.pop=null;render();}
 function toggleTier(k,e){if(e)e.stopPropagation();S.pop=S.pop===k?null:k;render();}
 function toggleRules(){S.showRules=!S.showRules;render();}
 function toggleSimple(v){S.simple=v;try{localStorage.setItem('cockpitMode',v?'simple':'detailed');}catch(e){}render();}
+function toggleRadar(i){S.radarOpen[i]=!S.radarOpen[i];render();}
+function copySeries(key,which,btn){
+  const SR=window.COCKPIT_LIVE&&window.COCKPIT_LIVE.series; if(!SR||!SR[key])return;
+  const text=which==='news'?SR[key].newsletter:SR[key].x; if(!text)return;
+  navigator.clipboard.writeText(text).then(()=>{btn.textContent='copied ✓';setTimeout(()=>btn.textContent='copy',1400);});
+}
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
 /* ============================ RENDER ============================ */
@@ -686,6 +692,62 @@ function calibrationPanel(r){
   </div>`;
 }
 
+/* Phases 9.1-9.3 — the Post radar: what's worth posting now, ranked, each card
+   opening the ready draft. Detailed + live read only (a creator tool). */
+const RBADGE={ALERT:{c:'#E4574C',t:'ALERT'},SCORECARD:{c:'#6EA8FE',t:'SCORECARD'},
+  HISTORY:{c:'#5FB37A',t:'HISTORY'},WEEKLY:{c:'#E8A13A',t:'WEEKLY'}};
+function pcard(title,text,copyJs,long){
+  const n=text.length, over=!long&&n>280;
+  return `<div style="padding:11px 13px;border-radius:10px;background:var(--panel3);border:1px solid var(--border2);display:flex;flex-direction:column;gap:7px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+      <span style="font:600 10px 'Inter';letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">${title}</span>
+      <span style="display:flex;align-items:center;gap:8px">
+        <span style="font:10px 'JetBrains Mono',monospace;color:${over?'#E8A13A':'#586170'}">${long?n+' chars':n+'/280'}</span>
+        <button onclick="${copyJs}" style="cursor:pointer;font:600 10px 'Inter';color:var(--muted);background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:3px 9px">copy</button>
+      </span></div>
+    <div style="font:12.5px/1.55 'Inter';color:#C6CCD3;white-space:pre-wrap">${esc(text)}</div></div>`;
+}
+function radarPanel(r){
+  if(r.id!=='live'||S.simple) return '';
+  const RD=window.COCKPIT_LIVE&&window.COCKPIT_LIVE.radar;
+  const SR=window.COCKPIT_LIVE&&window.COCKPIT_LIVE.series;
+  const P=window.COCKPIT_LIVE&&window.COCKPIT_LIVE.posts;
+  if(!RD||!RD.length) return '';
+  const draftBlock=c=>{
+    if(c.target==='thread'){
+      if(!P||!P.thread||!P.thread.length) return `<div style="font:italic 12px 'Inter';color:var(--faint2)">The weekly thread is in Post studio below.</div>`;
+      return P.thread.map((t,i)=>pcard(`thread ${i+1}/${P.thread.length}`,t,`copyPost('thread',${i},this)`)).join('');
+    }
+    const key=c.target.split(':')[1], s=SR&&SR[key];
+    if(!s) return `<div style="font:italic 12px 'Inter';color:var(--faint2)">Draft not available this week.</div>`;
+    let out=pcard('X post',s.x,`copySeries('${key}','x',this)`);
+    if(s.newsletter) out+=pcard('Newsletter long-form',s.newsletter,`copySeries('${key}','news',this)`,true);
+    return out;
+  };
+  const cards=RD.map((c,i)=>{
+    const b=RBADGE[c.badge]||{c:'#9BA6A0',t:c.badge}, open=S.radarOpen[i];
+    return `<div style="border:1px solid var(--border2);border-radius:12px;overflow:hidden;background:var(--panel2)">
+      <div onclick="toggleRadar(${i})" style="display:flex;align-items:center;gap:11px;padding:12px 13px;cursor:pointer;user-select:none">
+        <span style="flex:none;font:700 9px 'Inter';letter-spacing:.06em;color:#0c0e12;background:${b.c};border-radius:5px;padding:3px 7px">${b.t}</span>
+        <div style="flex:1;min-width:0">
+          <div style="font:600 13px/1.35 'Inter';color:#E9ECEF">${esc(c.title)}</div>
+          <div style="font:12px/1.4 'Inter';color:#8A93A0;margin-top:2px">${esc(c.why)}</div>
+        </div>
+        <span class="chev" style="flex:none;transform:rotate(${open?90:0}deg);color:var(--faint2);font-size:12px">▸</span>
+      </div>
+      ${open?`<div style="padding:0 13px 13px;display:flex;flex-direction:column;gap:8px;animation:expandIn .3s ease both">${draftBlock(c)}</div>`:''}
+    </div>`;
+  }).join('');
+  return `<div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px">
+      <span class="sect">Post radar <span style="color:#454b55">· what's worth posting now</span></span>
+      <span style="font:10px 'JetBrains Mono',monospace;color:#586170">${RD.length} ranked · gate-checked</span>
+    </div>
+    <div style="font:italic 400 11px/1.5 'Inter';color:var(--faint2);margin-bottom:11px">Ranked by rarity — alerts and matured windows first, the weekly anchor always there. Open a card for the ready draft. Silent when nothing's material.</div>
+    <div style="display:flex;flex-direction:column;gap:9px">${cards}</div>
+  </div>`;
+}
+
 /* Phase 8 — Post studio: gated drafts shipped in the payload. Live read only.
    Copy-to-clipboard; nothing auto-posts. */
 function copyPost(kind,idx,btn){
@@ -768,7 +830,7 @@ function render(){
   const r=read();
   const app=document.getElementById('app');
   const rightCol=S.simple?narrativePanel(r):narrativePanel(r)+calibrationPanel(r);
-  const below=S.simple?'':postsPanel(r)+mathsPanel();
+  const below=S.simple?'':radarPanel(r)+postsPanel(r)+mathsPanel();
   app.innerHTML=
     masthead(r)+verdictPanel(r)+timeMachine()+
     `<div class="cols"><div class="col">${macroPanel(r)}${dialsPanel(r)}</div><div class="col">${rightCol}</div></div>`+
