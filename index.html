@@ -695,7 +695,8 @@ function calibrationPanel(r){
 /* Phases 9.1-9.3 — the Post radar: what's worth posting now, ranked, each card
    opening the ready draft. Detailed + live read only (a creator tool). */
 const RBADGE={ALERT:{c:'#E4574C',t:'ALERT'},SCORECARD:{c:'#6EA8FE',t:'SCORECARD'},
-  HISTORY:{c:'#5FB37A',t:'HISTORY'},WEEKLY:{c:'#E8A13A',t:'WEEKLY'}};
+  HISTORY:{c:'#5FB37A',t:'HISTORY'},WEEKLY:{c:'#E8A13A',t:'WEEKLY'},
+  GLANCE:{c:'#21B8A6',t:'GLANCE'},'FIELD NOTE':{c:'#9BA6A0',t:'FIELD NOTE'}};
 function pcard(title,text,copyJs,long){
   const n=text.length, over=!long&&n>280;
   return `<div style="padding:11px 13px;border-radius:10px;background:var(--panel3);border:1px solid var(--border2);display:flex;flex-direction:column;gap:7px">
