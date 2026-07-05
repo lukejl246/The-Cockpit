@@ -162,7 +162,7 @@ window.COCKPIT_LIVE = {
    },
    {
     "name": "BMSB",
-    "text": "Which side of the bull/bear line is price on?\n\nPrice below it (bear) (below -11%).\n\nThe most-watched line in crypto — which is exactly why to discount it a little.\n\nNot advice."
+    "text": "Which side of the bull/bear line is price on?\n\nPrice below it (bear).\n\nThe most-watched line in crypto — which is exactly why to discount it a little.\n\nNot advice."
    }
   ],
   "combos": [
