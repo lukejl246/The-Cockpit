@@ -153,6 +153,20 @@
   .plainbox{margin:0 0 20px;padding:15px 17px;border-radius:12px;background:rgba(110,168,254,.07);border:1px solid rgba(110,168,254,.22);font:15px/1.6 'Inter';color:#D8DDE3}
   .plainbox .lead{display:block;font:600 9.5px 'Inter';letter-spacing:.14em;text-transform:uppercase;color:#6EA8FE;margin-bottom:7px}
   .plaindesc{font:italic 400 12px 'Inter';color:#8A93A0}
+  /* The Journey — 3D terrain hero (Simple mode) */
+  .jrcard{padding:16px 16px 12px}
+  .jrtop{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+  .jrbtns{display:flex;gap:7px;flex-wrap:wrap}
+  .jrbtn{cursor:pointer;font:600 10.5px 'Inter';color:var(--muted);background:var(--panel2);border:1px solid var(--border);border-radius:7px;padding:4px 10px}
+  .jrbtn:hover{color:#E9ECEF;border-color:#3a4150}
+  .jrwrap{position:relative;border-radius:11px;overflow:hidden;background:#0c0e12}
+  .jrwrap canvas{display:block;width:100%;height:auto}
+  .jrwrap:fullscreen{display:flex;align-items:center;justify-content:center;background:#0c0e12}
+  .jrnote{font:italic 400 11px/1.5 'Inter';color:var(--faint2);margin-top:9px}
+  .jrleg{margin-top:10px;display:flex;flex-direction:column;gap:6px;animation:expandIn .3s ease both}
+  .jrleg .row{display:flex;gap:10px;font:12px/1.45 'Inter';color:#99A1AC}
+  .jrleg .k{flex:none;width:132px;font-weight:600;color:#C6CCD3}
+  @media(max-width:820px){.jrleg .k{width:100px}}
   @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;transition:none!important}}
 
   /* ---- responsive: collapse to single column / phone sizes ---- */
