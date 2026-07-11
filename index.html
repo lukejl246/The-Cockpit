@@ -425,8 +425,8 @@ function pullWatch(){
 function pullNow(){
   if(PULLING||!PULLSRV)return;
   PULLING=true;render();
-  fetch(PULL_URL+'/pull',{method:'POST'}).then(()=>pullWatch())
-    .catch(()=>{PULLING=false;render();});
+  fetch(PULL_URL+'/pull').then(()=>pullWatch())
+    .catch(e=>{console.error('pull failed:',e);PULLING=false;render();});
 }
 
 /* ============================ RENDER ============================ */
