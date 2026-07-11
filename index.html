@@ -4,127 +4,124 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<meta name="theme-color" content="#0B0D11">
+<meta name="theme-color" content="#040405">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Cockpit">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>The Cockpit — weekly read</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,450;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,450&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0B0D11; --panel:#181C22; --panel2:#20252D; --panel3:#13161B;
-    --border:#2A2F38; --border2:#23272F; --text:#E9ECEF; --muted:#99A1AC;
-    --faint:#6B7280; --faint2:#586170; --accent:#6EA8FE;
-    --z-bottoming:#3E7BD6; --z-accumulation:#21B8A6; --z-mid:#5FB37A;
-    --z-elevated:#E8A13A; --z-euphoria:#E4574C; --divergence:#B06FE0;
+    --bg:#040405; --panel:#1b1b1f; --panel2:#26262b; --panel3:#131316;
+    --border:rgba(255,255,255,.09); --border2:rgba(255,255,255,.055); --text:#f5f5f7; --muted:#a1a1a8;
+    --faint:#8e8e95; --faint2:#6e6e76; --accent:#0a84ff;
+    --z-bottoming:#0a84ff; --z-accumulation:#66d4cf; --z-mid:#30d158;
+    --z-elevated:#ff9f0a; --z-euphoria:#ff453a; --divergence:#bf5af2;
   }
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--bg);color:var(--text);
-    font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+    font-family:system-ui,sans-serif;-webkit-font-smoothing:antialiased}
   ::-webkit-scrollbar{width:9px;height:9px}
   ::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px}
   ::-webkit-scrollbar-track{background:transparent}
-  .mono{font-family:'JetBrains Mono',monospace}
-  .serif{font-family:'Fraunces',Georgia,serif}
-  .sect{font:600 10.5px 'Inter';letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
-  .stage{min-height:100%;background:radial-gradient(1200px 600px at 50% -10%,#12161d,#0B0D11 60%);padding:34px 30px 60px}
-  .wrap{max-width:1160px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
-  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px 24px}
+  .mono{font-family:ui-monospace,monospace}
+  .serif{font-family:system-ui}
+  .sect{font:600 11px system-ui;letter-spacing:.07em;text-transform:uppercase;color:var(--faint)}
+  .stage{min-height:100%;background:radial-gradient(1100px 520px at 50% -12%,rgba(255,255,255,.035),transparent 62%),var(--bg);padding:38px 32px 72px}
+  .wrap{max-width:1160px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+  .card{background:var(--panel);border:1px solid var(--border2);border-radius:20px;padding:24px 26px;box-shadow:0 14px 34px rgba(0,0,0,.32)}
 
   /* masthead */
   .mast{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap}
   .brand{display:flex;align-items:center;gap:12px}
-  .brand h1{margin:0;font:600 31px 'Fraunces',Georgia,serif;letter-spacing:.01em}
-  .badge{font:600 9px 'Inter';letter-spacing:.14em;text-transform:uppercase;color:var(--faint);border:1px solid var(--border);border-radius:5px;padding:3px 7px}
-  .tag{font:400 12.5px 'Inter';color:#8A93A0;margin-top:5px}
-  .nowlbl{font:600 9.5px 'Inter';letter-spacing:.16em;text-transform:uppercase;color:var(--faint2)}
+  .brand h1{margin:0;font:700 32px system-ui;letter-spacing:-.022em}
+  .badge{font:600 10px system-ui;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);background:rgba(255,255,255,.07);border-radius:999px;padding:4px 10px}
+  .tag{font:400 12.5px system-ui;color:#98989d;margin-top:5px}
+  .nowlbl{font:600 9.5px system-ui;letter-spacing:.16em;text-transform:uppercase;color:var(--faint2)}
 
   /* time machine */
-  .tm{background:#12151a;border:1px solid var(--border2);border-radius:15px;padding:20px 26px 14px}
-  .tm-nav{width:26px;height:26px;border-radius:7px;border:1px solid var(--border);background:var(--panel);color:var(--muted);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;user-select:none}
-  .tm-nav:hover{color:var(--text);border-color:#3a414c}
+  .tm{background:var(--panel3);border:1px solid var(--border2);border-radius:20px;padding:20px 26px 14px;box-shadow:0 14px 34px rgba(0,0,0,.32)}
+  .tm-nav{width:28px;height:28px;border-radius:999px;border:none;background:rgba(255,255,255,.08);color:var(--muted);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;user-select:none}
+  .tm-nav:hover{color:var(--text);background:rgba(255,255,255,.14)}
   .tm-plot{position:relative;height:132px;margin-top:12px}
   .tm-node{position:absolute;top:0;bottom:0;transform:translateX(-50%);width:46px;cursor:pointer}
   .tm-dot{position:absolute;left:50%;transform:translate(-50%,-50%);border-radius:50%;transition:width .3s cubic-bezier(.22,1,.36,1),height .3s cubic-bezier(.22,1,.36,1),box-shadow .3s}
-  .tm-short{position:absolute;left:50%;top:108px;transform:translateX(-50%);font:10px 'JetBrains Mono',monospace;white-space:nowrap;transition:color .3s}
+  .tm-short{position:absolute;left:50%;top:108px;transform:translateX(-50%);font:10px ui-monospace,monospace;white-space:nowrap;transition:color .3s}
 
   /* columns */
   .cols{display:flex;gap:16px;align-items:flex-start}
   .col{flex:1;display:flex;flex-direction:column;gap:16px;min-width:0}
 
   /* verdict */
-  .verdict{margin:0 0 22px;font:450 24px/1.46 'Fraunces',Georgia,serif;color:#E4E8ED;letter-spacing:.002em}
-  .zoneName{font:600 50px/.9 'Fraunces',Georgia,serif;letter-spacing:.01em}
-  .qbtn{cursor:pointer;width:19px;height:19px;border-radius:50%;border:1px solid var(--border);color:var(--muted);font:600 11px 'Inter';display:inline-flex;align-items:center;justify-content:center;user-select:none}
-  .qbtn:hover{color:var(--text);border-color:#3a414c}
-  .divchip{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:9px;background:rgba(176,111,224,.12);border:1px solid rgba(176,111,224,.5)}
-  .divsq{width:9px;height:9px;border-radius:2px;transform:rotate(45deg);background:var(--divergence);box-shadow:0 0 10px rgba(176,111,224,.8)}
+  .verdict{margin:0 0 22px;font:590 23px/1.42 system-ui;color:#f5f5f7;letter-spacing:-.014em}
+  .zoneName{font:700 52px/.95 system-ui;letter-spacing:-.03em}
+  .qbtn{cursor:pointer;width:20px;height:20px;border-radius:50%;border:none;background:rgba(255,255,255,.08);color:var(--muted);font:600 11px system-ui;display:inline-flex;align-items:center;justify-content:center;user-select:none}
+  .qbtn:hover{color:var(--text);background:rgba(255,255,255,.14)}
+  .divchip{display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border-radius:999px;background:rgba(191,90,242,.16);border:none}
+  .divsq{width:9px;height:9px;border-radius:2px;transform:rotate(45deg);background:var(--divergence);box-shadow:0 0 10px rgba(191,90,242,.8)}
 
   /* band */
-  .band{position:relative;height:15px;border-radius:8px;background:linear-gradient(90deg,#3E7BD6,#21B8A6 25%,#5FB37A 50%,#E8A13A 75%,#E4574C);box-shadow:inset 0 0 0 1px rgba(255,255,255,.05),inset 0 2px 5px rgba(0,0,0,.25)}
+  .band{position:relative;height:11px;border-radius:999px;background:linear-gradient(90deg,#0a84ff,#66d4cf 25%,#30d158 50%,#ff9f0a 75%,#ff453a);box-shadow:inset 0 1px 3px rgba(0,0,0,.35)}
   .marker{position:absolute;top:-9px;bottom:-9px;width:0;animation:markerIn .9s cubic-bezier(.34,1.3,.5,1) both;pointer-events:none}
   .marker .halo{position:absolute;left:50%;top:50%;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle,rgba(233,236,239,.5),rgba(233,236,239,0) 70%);animation:haloPulse 3.4s ease-in-out infinite}
   .marker .stem{position:absolute;left:-1.5px;top:0;bottom:0;width:3px;border-radius:2px;background:var(--text);box-shadow:0 0 10px rgba(233,236,239,.6)}
   .marker .knob{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:13px;height:13px;border-radius:50%;background:var(--text)}
   .ticks{position:relative;height:24px}
   .tick{position:absolute;bottom:0;transform:translateX(-50%);text-align:center}
-  .tick .t{font:9px 'JetBrains Mono',monospace;color:var(--faint2)}
+  .tick .t{font:9px ui-monospace,monospace;color:var(--faint2)}
   .tick .bar{width:1px;height:7px;margin:2px auto 0}
   .zlabels{display:flex;margin-top:13px}
   .zlabels>div{flex:1;padding-top:8px}
-  .zl{font-family:'Inter';font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+  .zl{font-family:system-ui;font-size:11px;letter-spacing:.05em;text-transform:uppercase}
 
-  .vmeta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:22px;padding-top:15px;border-top:1px solid var(--border2);font:11.5px 'JetBrains Mono',monospace;color:var(--muted)}
+  .vmeta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:22px;padding-top:15px;border-top:1px solid var(--border2);font:11.5px ui-monospace,monospace;color:var(--muted)}
   .vsep{width:1px;height:12px;background:var(--border)}
-  .pill{padding:2px 7px;border:1px solid var(--border);border-radius:5px;color:var(--faint);font-size:10px}
+  .pill{padding:3px 9px;background:rgba(255,255,255,.07);border-radius:999px;color:var(--faint);font-size:10px}
 
   /* macro */
   .mstate{display:inline-flex;align-items:center;gap:8px;padding:5px 11px;border-radius:8px}
   .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-  .mtile{position:relative;padding:12px 13px;border-radius:10px;background:var(--panel2);border:1px solid var(--border2)}
-  .mtile .lbl{display:flex;align-items:center;gap:6px;font:500 10px 'Inter';letter-spacing:.05em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
-  .mtile .val{font:16px 'JetBrains Mono',monospace;color:var(--text)}
+  .mtile{position:relative;padding:13px 14px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid transparent}
+  .mtile .lbl{display:flex;align-items:center;gap:6px;font:500 10px system-ui;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+  .mtile .val{font:16px ui-monospace,monospace;color:var(--text)}
   .mtile .val .sub{font-size:11px;color:var(--faint)}
-  .tip{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:5;padding:10px 12px;border-radius:9px;background:#0B0D11;border:1px solid #333a45;box-shadow:0 12px 30px rgba(0,0,0,.55);font:12px/1.45 'Inter';color:#C6CCD3;opacity:0;visibility:hidden;transition:opacity .18s}
+  .tip{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:5;padding:10px 12px;border-radius:9px;background:#2a2a2e;border:none;box-shadow:0 16px 40px rgba(0,0,0,.55);font:12px/1.45 system-ui;color:#e8e8ed;opacity:0;visibility:hidden;transition:opacity .18s}
   .mtile:hover .tip{opacity:1;visibility:visible}
 
   /* dials */
   .dial{border-top:1px solid var(--border2)}
   .dial-row{display:flex;align-items:center;gap:12px;padding:13px 0;cursor:pointer}
-  .dial-label{min-width:78px;font:600 12px 'Inter';letter-spacing:.03em;color:var(--text)}
+  .dial-label{min-width:78px;font:600 12px system-ui;letter-spacing:.03em;color:var(--text)}
   .dial-read{position:relative;display:flex;align-items:center;gap:7px;min-width:118px}
-  .dial-read .r{font:13.5px 'JetBrains Mono',monospace}
-  .dtip{position:absolute;left:0;top:calc(100% + 7px);z-index:6;width:230px;padding:10px 12px;border-radius:9px;background:#0B0D11;border:1px solid #333a45;box-shadow:0 12px 30px rgba(0,0,0,.55);font:12px/1.45 'Inter';color:#C6CCD3;opacity:0;visibility:hidden;transition:opacity .18s}
+  .dial-read .r{font:13.5px ui-monospace,monospace}
+  .dtip{position:absolute;left:0;top:calc(100% + 7px);z-index:6;width:230px;padding:10px 12px;border-radius:12px;background:#2a2a2e;border:none;box-shadow:0 16px 40px rgba(0,0,0,.55);font:12px/1.45 system-ui;color:#e8e8ed;opacity:0;visibility:hidden;transition:opacity .18s}
   .dial-read:hover .dtip{opacity:1;visibility:visible}
-  .tier{padding:3px 8px;border-radius:6px;font:9.5px 'Inter';letter-spacing:.05em;cursor:pointer;white-space:nowrap}
-  .dial-n{font:10.5px 'JetBrains Mono',monospace;color:var(--faint2);white-space:nowrap}
-  .llchip{padding:2px 6px;border-radius:5px;border:1px solid var(--border2);font:9px 'Inter';letter-spacing:.03em;color:var(--faint2);white-space:nowrap}
-  .refrow{display:grid;grid-template-columns:88px 58px 1fr auto;align-items:baseline;gap:3px 10px;padding:8px 0;border-top:1px solid #20242b}
-  .refname{font:600 11px 'Inter';color:var(--muted)}
-  .refread{font:12.5px 'JetBrains Mono',monospace;color:var(--text)}
-  .refstate{font:12px 'Inter';color:var(--muted)}
-  .refnote{grid-column:2/-1;font:italic 400 10.5px 'Inter';color:var(--faint2)}
+  .tier{padding:3px 8px;border-radius:6px;font:9.5px system-ui;letter-spacing:.05em;cursor:pointer;white-space:nowrap}
+  .dial-n{font:10.5px ui-monospace,monospace;color:var(--faint2);white-space:nowrap}
+  .llchip{padding:2px 6px;border-radius:5px;border:1px solid var(--border2);font:9px system-ui;letter-spacing:.03em;color:var(--faint2);white-space:nowrap}
+  .refrow{display:grid;grid-template-columns:88px 58px 1fr auto;align-items:baseline;gap:3px 10px;padding:8px 0;border-top:1px solid rgba(255,255,255,.055)}
+  .refname{font:600 11px system-ui;color:var(--muted)}
+  .refread{font:12.5px ui-monospace,monospace;color:var(--text)}
+  .refstate{font:12px system-ui;color:var(--muted)}
+  .refnote{grid-column:2/-1;font:italic 400 10.5px system-ui;color:var(--faint2)}
   @media(max-width:820px){.refrow{grid-template-columns:74px 52px 1fr auto}.refnote{grid-column:1/-1}}
   .chev{color:var(--faint2);font-size:11px;transition:transform .3s}
-  .dial-mean{padding-left:90px;margin-top:3px;font:13.5px/1.45 'Inter';color:var(--muted)}
-  .pop{position:absolute;right:0;top:calc(100% + 7px);z-index:7;width:260px;padding:13px 15px;border-radius:11px;background:#0B0D11;border:1px solid #333a45;box-shadow:0 16px 36px rgba(0,0,0,.6)}
+  .dial-mean{padding-left:90px;margin-top:3px;font:13.5px/1.45 system-ui;color:var(--muted)}
+  .pop{position:absolute;right:0;top:calc(100% + 7px);z-index:7;width:260px;padding:13px 15px;border-radius:14px;background:#2a2a2e;border:none;box-shadow:0 18px 44px rgba(0,0,0,.6)}
   .expand{padding:2px 0 16px 90px}
   .expand .inner{padding:13px 16px;border-radius:11px;background:var(--panel3);border:1px solid var(--border2)}
-  .post{margin:0 0 12px;font:italic 450 15.5px/1.5 'Fraunces',Georgia,serif;color:#D8DDE3}
+  .post{margin:0 0 12px;font:italic 500 15px/1.5 system-ui;color:#e8e8ed}
 
   /* narrative + calibration */
   .narr{display:flex;gap:11px;align-items:baseline}
-  .narr .a{font:13px 'JetBrains Mono',monospace;width:14px;text-align:center;color:var(--faint2)}
-  .narr .t{font:13.5px/1.5 'Inter';color:#C6CCD3}
-  .calhead{display:flex;gap:10px;padding:0 4px 8px;font:600 9px 'Inter';letter-spacing:.08em;text-transform:uppercase;color:var(--faint2)}
-  .calrow{display:flex;gap:10px;align-items:center;padding:9px 4px;border-top:1px solid #20242b}
-  .pending{padding:13px 15px;border-radius:11px;background:rgba(62,123,214,.08);border:1px solid rgba(62,123,214,.28);margin-bottom:14px}
+  .narr .a{font:13px ui-monospace,monospace;width:14px;text-align:center;color:var(--faint2)}
+  .narr .t{font:13.5px/1.5 system-ui;color:#d5d5da}
+  .calhead{display:flex;gap:10px;padding:0 4px 8px;font:600 9px system-ui;letter-spacing:.08em;text-transform:uppercase;color:var(--faint2)}
+  .calrow{display:flex;gap:10px;align-items:center;padding:9px 4px;border-top:1px solid rgba(255,255,255,.055)}
+  .pending{padding:14px 16px;border-radius:14px;background:rgba(10,132,255,.10);border:none;margin-bottom:14px}
 
-  .footer{font:12px/1.65 'Inter';color:var(--faint2);max-width:900px;border-top:1px solid #1b1f26;padding-top:18px}
+  .footer{font:12px/1.65 system-ui;color:var(--faint2);max-width:900px;border-top:1px solid rgba(255,255,255,.06);padding-top:18px}
   @keyframes markerIn{from{transform:translateX(-32px)}to{transform:translateX(0)}}
   @keyframes haloPulse{0%,100%{opacity:.35;transform:translate(-50%,-50%) scale(1)}50%{opacity:.8;transform:translate(-50%,-50%) scale(1.25)}}
   @keyframes expandIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
@@ -133,44 +130,44 @@
   /* ---- polish: transitions, hover states, post grid ---- */
   .card{transition:border-color .3s ease}
   .dial-row{margin:0 -8px;padding-left:8px;padding-right:8px;border-radius:9px;transition:background .18s ease}
-  .dial-row:hover{background:#1b2027}
+  .dial-row:hover{background:rgba(255,255,255,.04)}
   .refrow{margin:0 -6px;padding-left:6px;padding-right:6px;border-radius:8px;transition:background .18s ease}
-  .refrow:hover{background:#1b2027}
+  .refrow:hover{background:rgba(255,255,255,.04)}
   .mtile{transition:border-color .2s ease,background .2s ease}
-  .mtile:hover{border-color:#333a45;background:#232935}
+  .mtile:hover{background:rgba(255,255,255,.085)}
   .calrow{transition:background .15s ease}
-  .calrow:hover{background:rgba(110,168,254,.05)}
+  .calrow:hover{background:rgba(10,132,255,.05)}
   button{transition:background .18s ease,border-color .18s ease,color .18s ease}
   .poststrip{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
   .poststrip>div{transition:border-color .2s ease}
-  .poststrip>div:hover{border-color:#333a45}
+  .poststrip>div:hover{border-color:rgba(255,255,255,.14)}
   .tm-nav:active{transform:scale(.92)}
   a{color:var(--accent)}
-  .modetog{display:inline-flex;border:1px solid var(--border);border-radius:9px;overflow:hidden;font:600 11px 'Inter';letter-spacing:.02em;user-select:none}
-  .modetog span{padding:6px 14px;cursor:pointer;color:var(--muted);transition:background .18s,color .18s}
+  .modetog{display:inline-flex;background:rgba(255,255,255,.07);border-radius:999px;padding:2px;overflow:hidden;font:600 11.5px system-ui;letter-spacing:0;user-select:none}
+  .modetog span{padding:6px 15px;border-radius:999px;cursor:pointer;color:var(--muted);transition:background .18s,color .18s}
   .modetog span:hover{color:var(--text)}
-  .modetog span.on{background:var(--accent);color:#0B0D11}
-  .plainbox{margin:0 0 20px;padding:15px 17px;border-radius:12px;background:rgba(110,168,254,.07);border:1px solid rgba(110,168,254,.22);font:15px/1.6 'Inter';color:#D8DDE3}
-  .plainbox .lead{display:block;font:600 9.5px 'Inter';letter-spacing:.14em;text-transform:uppercase;color:#6EA8FE;margin-bottom:7px}
-  .plaindesc{font:italic 400 12px 'Inter';color:#8A93A0}
+  .modetog span.on{background:var(--accent);color:#fff}
+  .plainbox{margin:0 0 20px;padding:16px 18px;border-radius:16px;background:rgba(10,132,255,.12);border:none;font:15px/1.6 system-ui;color:#eef3fb}
+  .plainbox .lead{display:block;font:600 9.5px system-ui;letter-spacing:.14em;text-transform:uppercase;color:#0a84ff;margin-bottom:7px}
+  .plaindesc{font:italic 400 12px system-ui;color:#98989d}
   /* pull button — only appears when the local engine answers */
-  .pullbtn{cursor:pointer;display:inline-flex;align-items:center;gap:6px;font:600 10.5px 'Inter';color:var(--muted);background:var(--panel2);border:1px solid var(--border);border-radius:7px;padding:4px 11px;user-select:none}
-  .pullbtn:hover{color:#E9ECEF;border-color:#3a4150}
-  .pullbtn.on{color:#6EA8FE;border-color:rgba(110,168,254,.45);animation:pulse 1.6s ease-in-out infinite}
+  .pullbtn{cursor:pointer;display:inline-flex;align-items:center;gap:6px;font:600 11px system-ui;color:var(--text);background:rgba(255,255,255,.08);border:none;border-radius:999px;padding:6px 13px;user-select:none}
+  .pullbtn:hover{background:rgba(255,255,255,.14)}
+  .pullbtn.on{color:#fff;background:rgba(10,132,255,.28);animation:pulse 1.6s ease-in-out infinite}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
   /* The Journey — 3D terrain hero (Simple mode) */
   .jrcard{padding:16px 16px 12px}
   .jrtop{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
   .jrbtns{display:flex;gap:7px;flex-wrap:wrap}
-  .jrbtn{cursor:pointer;font:600 10.5px 'Inter';color:var(--muted);background:var(--panel2);border:1px solid var(--border);border-radius:7px;padding:4px 10px}
-  .jrbtn:hover{color:#E9ECEF;border-color:#3a4150}
-  .jrwrap{position:relative;border-radius:11px;overflow:hidden;background:#0c0e12}
+  .jrbtn{cursor:pointer;font:600 11px system-ui;color:var(--text);background:rgba(255,255,255,.08);border:none;border-radius:999px;padding:6px 12px}
+  .jrbtn:hover{background:rgba(255,255,255,.14)}
+  .jrwrap{position:relative;border-radius:16px;overflow:hidden;background:#0c0e12}
   .jrwrap canvas{display:block;width:100%;height:auto}
   .jrwrap:fullscreen{display:flex;align-items:center;justify-content:center;background:#0c0e12}
-  .jrnote{font:italic 400 11px/1.5 'Inter';color:var(--faint2);margin-top:9px}
+  .jrnote{font:italic 400 11px/1.5 system-ui;color:var(--faint2);margin-top:9px}
   .jrleg{margin-top:10px;display:flex;flex-direction:column;gap:6px;animation:expandIn .3s ease both}
-  .jrleg .row{display:flex;gap:10px;font:12px/1.45 'Inter';color:#99A1AC}
-  .jrleg .k{flex:none;width:132px;font-weight:600;color:#C6CCD3}
+  .jrleg .row{display:flex;gap:10px;font:12px/1.45 system-ui;color:#a1a1a8}
+  .jrleg .k{flex:none;width:132px;font-weight:600;color:#d5d5da}
   @media(max-width:820px){.jrleg .k{width:100px}}
   @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important;transition:none!important}}
 
@@ -206,8 +203,8 @@
 /* ============================ DATA ============================ */
 const ZONES=['bottoming','accumulation','mid-cycle','elevated','euphoria'];
 const CUTS=[0.2,0.4,0.6,0.8];
-const ZC={bottoming:'#3E7BD6',accumulation:'#21B8A6','mid-cycle':'#5FB37A',elevated:'#E8A13A',euphoria:'#E4574C'};
-const MC={tailwind:'#5FB37A',neutral:'#9BA6A0',headwind:'#E4574C'};
+const ZC={bottoming:'#0a84ff',accumulation:'#66d4cf','mid-cycle':'#30d158',elevated:'#ff9f0a',euphoria:'#ff453a'};
+const MC={tailwind:'#30d158',neutral:'#98989d',headwind:'#ff453a'};
 const MARR={tailwind:'↑',neutral:'→',headwind:'↓'};
 const ARR={up:'↑',down:'↓',flat:'→'};
 const TTXT={mechanism:'MECHANISM',base:'BASE RATE',story:'STORY'};
@@ -237,10 +234,11 @@ const PLAIN_ZONE={
   euphoria:'euphoric — about as stretched as past cycle tops'};
 const PLAIN_MSTATE={tailwind:'helping risk assets (a tailwind)',neutral:'neutral',headwind:'working against risk assets (a headwind)'};
 function plainSummary(r){
-  const zone=zoneOf(r.composite),m=r.macro;
+  const zone=zoneFor(r),m=r.macro;
   return `<b style="color:${ZC[zone]};text-transform:capitalize">${zone}</b> — ${PLAIN_ZONE[zone]||''}. The macro backdrop (rates, liquidity, the Fed) is <b>${PLAIN_MSTATE[m.state]}</b>.${r.div.on?' Watch-out: price has run ahead of the on-chain data (a divergence).':''}`;
 }
 function zoneOf(c){let n=0;for(const x of CUTS){if(c>=x)n++;}return ZONES[n];}
+const zoneFor=r=>r.zone||zoneOf(r.composite); /* live zone carries hysteresis (method v1.1) */
 function rgba(hex,a){const h=hex.replace('#','');return 'rgba('+parseInt(h.slice(0,2),16)+','+parseInt(h.slice(2,4),16)+','+parseInt(h.slice(4,6),16)+','+a+')';}
 function D(key,label,reading,dir,meaning,post,tier,n,na){return {key,label,reading,dir,meaning,post,tier,n,detail:DET[key],caveat:CAV[key],na:!!na};}
 function mkdials(t,v,s,dom){return [
@@ -371,7 +369,7 @@ Object.keys(REF).forEach(id=>{ if(BMSB[id]) REF[id].push(R('BMSB',BMSB[id][0],BM
 if(window.COCKPIT_LIVE){
   const L=window.COCKPIT_LIVE, i=READS.findIndex(r=>r.id==='live');
   READS[i]=Object.assign({},READS[i],{
-    date:L.date,price:L.price,composite:L.composite,verdict:L.verdict,
+    date:L.date,price:L.price,composite:L.composite,zone:L.zone,verdict:L.verdict,
     div:L.div,macro:L.macro,narrative:L.narrative,invalidation:L.invalidation,
     dials:mkdials(L.t,L.v,L.s,L.dom)
   });
@@ -468,13 +466,13 @@ function tmReadout(i){
       return `<span style="white-space:nowrap">${CYCLBL[c]}: <span style="color:${ZC[oz]}">${oz}</span> <span class="mono" style="font-size:10px">${ow[1].toFixed(2)}</span></span>`;
     }).filter(Boolean);
     if(others.length)
-      align=`<div style="margin-top:6px;font:11px 'Inter';color:#8A93A0">day ${w[5]} of the ${CYCLBL[w[4]]} cycle · same day-count elsewhere: ${others.join(' · ')}</div>`;
+      align=`<div style="margin-top:6px;font:11px system-ui;color:#98989d">day ${w[5]} of the ${CYCLBL[w[4]]} cycle · same day-count elsewhere: ${others.join(' · ')}</div>`;
   }
   return `<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-      <span class="mono" style="font-size:12px;color:#E9ECEF">${w[0]}</span>
-      <span class="mono" style="font-size:12px;color:#99A1AC">BTC ${px}</span>
-      <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:${zc}"></span><span style="font:600 11px 'Inter';color:${zc}">${zone.toUpperCase()}</span><span class="mono" style="font-size:10px;color:#586170">${w[1].toFixed(2)}</span></span>
-      <span class="mono" style="font-size:10.5px;color:#586170">rel: ${rel}</span>
+      <span class="mono" style="font-size:12px;color:#f5f5f7">${w[0]}</span>
+      <span class="mono" style="font-size:12px;color:#a1a1a8">BTC ${px}</span>
+      <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:${zc}"></span><span style="font:600 11px system-ui;color:${zc}">${zone.toUpperCase()}</span><span class="mono" style="font-size:10px;color:#6e6e76">${w[1].toFixed(2)}</span></span>
+      <span class="mono" style="font-size:10.5px;color:#6e6e76">rel: ${rel}</span>
     </div>${align}`;
 }
 function tmScrub(e){
@@ -549,19 +547,19 @@ function timeMachine(){
   }).join('');
   const hlabels=HIST.halvings.map(h=>{
     const i=HIST.weeks.findIndex(w=>w[0]>=h); if(i<0) return '';
-    return `<span style="position:absolute;left:${(i/(N-1)*100)}%;top:2px;transform:translateX(-50%);font:9px 'JetBrains Mono',monospace;color:#454b55">⛏ '${h.slice(2,4)}</span>`;
+    return `<span style="position:absolute;left:${(i/(N-1)*100)}%;top:2px;transform:translateX(-50%);font:9px ui-monospace,monospace;color:#5c5c63">⛏ '${h.slice(2,4)}</span>`;
   }).join('');
   const dots=Object.entries(PIVW).map(([id,i])=>{
     const r=READS.find(x=>x.id===id); if(!r||i<0) return '';
-    const col=ZC[zoneOf(r.composite)], sel=id===S.readId;
-    return `<span onclick="setRead('${id}')" onpointerdown="event.stopPropagation()" title="${r.label}" style="position:absolute;left:${(i/(N-1)*100)}%;top:${tmY(HIST.weeks[i][1])-(sel?7:5)}px;transform:translateX(-50%);width:${sel?14:10}px;height:${sel?14:10}px;border-radius:50%;background:${col};cursor:pointer;box-shadow:${sel&&S.scrub==null?('0 0 0 3px '+rgba(col,.3)+',0 0 12px '+rgba(col,.7)):'0 0 0 2px #12151a'};z-index:3"></span>`;
+    const col=ZC[zoneFor(r)], sel=id===S.readId;
+    return `<span onclick="setRead('${id}')" onpointerdown="event.stopPropagation()" title="${r.label}" style="position:absolute;left:${(i/(N-1)*100)}%;top:${tmY(HIST.weeks[i][1])-(sel?7:5)}px;transform:translateX(-50%);width:${sel?14:10}px;height:${sel?14:10}px;border-radius:50%;background:${col};cursor:pointer;box-shadow:${sel&&S.scrub==null?('0 0 0 3px '+rgba(col,.3)+',0 0 12px '+rgba(col,.7)):'0 0 0 2px #131316'};z-index:3"></span>`;
   }).join('');
   const curX=(SCRUB/(N-1)*100)+'%', curY=tmY(HIST.weeks[SCRUB][1])-4;
   return `<div class="tm">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
       <span class="sect">Time machine · every week since ${HIST.weeks[0][0].slice(0,4)}</span>
       <div style="display:flex;align-items:center;gap:12px">
-        ${S.scrub!=null?`<span onclick="exitScrub()" style="cursor:pointer;font:600 11px 'Inter';color:var(--accent);border:1px solid rgba(110,168,254,.4);border-radius:7px;padding:3px 10px">⟲ back to live</span>`:`<span style="font:12px 'Inter';color:#6B7280" class="hide-sm">drag to scrub · release to read that week · click a dot for a pivot</span>`}
+        ${S.scrub!=null?`<span onclick="exitScrub()" style="cursor:pointer;font:600 11px system-ui;color:var(--accent);border:1px solid rgba(10,132,255,.4);border-radius:7px;padding:3px 10px">⟲ back to live</span>`:`<span style="font:12px system-ui;color:#8e8e95" class="hide-sm">drag to scrub · release to read that week · click a dot for a pivot</span>`}
         <div style="display:flex;gap:6px"><span class="tm-nav" onclick="step(-1)">◀</span><span class="tm-nav" onclick="step(1)">▶</span></div>
       </div>
     </div>
@@ -571,10 +569,10 @@ function timeMachine(){
       ${hlabels}${dots}
       <div id="tmcur" style="position:absolute;top:0;bottom:0;left:${curX};width:0;pointer-events:none;z-index:2">
         <div style="position:absolute;top:0;bottom:0;left:-0.5px;width:1px;background:rgba(233,236,239,.45)"></div>
-        <div id="tmcdot" style="position:absolute;left:-4px;top:${curY}px;width:8px;height:8px;border-radius:50%;background:#E9ECEF;box-shadow:0 0 8px rgba(233,236,239,.7)"></div>
+        <div id="tmcdot" style="position:absolute;left:-4px;top:${curY}px;width:8px;height:8px;border-radius:50%;background:#f5f5f7;box-shadow:0 0 8px rgba(233,236,239,.7)"></div>
       </div>
     </div>
-    <div id="tmout" style="margin-top:10px;padding-top:10px;border-top:1px solid #1b1f26;min-height:34px">${tmReadout(SCRUB)}</div>
+    <div id="tmout" style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);min-height:34px">${tmReadout(SCRUB)}</div>
   </div>`;
 }
 
@@ -582,18 +580,18 @@ function timeMachineWave(){
   const cur=read();
   const wave=ORDER.map(id=>{const r=READS.find(x=>x.id===id);return (LEFT[id]*10)+','+Math.round(12+(1-r.composite)*84);}).join(' ');
   const nodes=ORDER.map(id=>{
-    const r=READS.find(x=>x.id===id);const sel=id===S.readId;const col=ZC[zoneOf(r.composite)];
+    const r=READS.find(x=>x.id===id);const sel=id===S.readId;const col=ZC[zoneFor(r)];
     const size=sel?17:11, top=Math.round(12+(1-r.composite)*84);
-    const ring=sel?('0 0 0 4px '+rgba(col,.26)+',0 0 16px '+rgba(col,.7)):'0 0 0 2px #12151a';
+    const ring=sel?('0 0 0 4px '+rgba(col,.26)+',0 0 16px '+rgba(col,.7)):'0 0 0 2px #131316';
     return `<div class="tm-node" style="left:${LEFT[id]}%" onclick="setRead('${id}')">
       <span class="tm-dot" style="top:${top}px;width:${size}px;height:${size}px;background:${col};box-shadow:${ring}"></span>
-      <span class="tm-short" style="color:${sel?'#E9ECEF':'#6B7280'}">${r.short.replace(' top','').replace(' low','')==='Live'?'Live':r.short.replace(' top',"'").replace(' low',"'").replace("''","'")}</span>
+      <span class="tm-short" style="color:${sel?'#f5f5f7':'#8e8e95'}">${r.short.replace(' top','').replace(' low','')==='Live'?'Live':r.short.replace(' top',"'").replace(' low',"'").replace("''","'")}</span>
     </div>`;}).join('');
   return `<div class="tm">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
       <span class="sect">Time machine · the cycle so far</span>
       <div style="display:flex;align-items:center;gap:12px">
-        <span style="font:12px 'Inter';color:#6B7280" class="hide-sm">click any pivot to re-read</span>
+        <span style="font:12px system-ui;color:#8e8e95" class="hide-sm">click any pivot to re-read</span>
         <div style="display:flex;gap:6px"><span class="tm-nav" onclick="step(-1)">◀</span><span class="tm-nav" onclick="step(1)">▶</span></div>
       </div>
     </div>
@@ -605,14 +603,14 @@ function timeMachineWave(){
 }
 
 function verdictPanel(r){
-  const zone=zoneOf(r.composite),zColor=ZC[zone],pct=Math.round(r.composite*100);
+  const zone=zoneFor(r),zColor=ZC[zone],pct=Math.round(r.composite*100);
   const ticks=READS.filter(x=>x.kind!=='live').map(x=>{const c=ZC[zoneOf(x.composite)];return `<div class="tick" style="left:${Math.round(x.composite*100)}%"><div class="t">${x.short.replace(' top','').replace(' low','')}</div><div class="bar" style="background:${rgba(c,.7)}"></div></div>`;}).join('');
-  const zlabels=ZONES.map(z=>{const on=z===zone;return `<div style="border-top:2px solid ${rgba(ZC[z],on?1:.4)}"><span class="zl" style="color:${on?'#E9ECEF':'#6B7280'};font-weight:${on?600:500}">${z}</span></div>`;}).join('');
+  const zlabels=ZONES.map(z=>{const on=z===zone;return `<div style="border-top:2px solid ${rgba(ZC[z],on?1:.4)}"><span class="zl" style="color:${on?'#f5f5f7':'#8e8e95'};font-weight:${on?600:500}">${z}</span></div>`;}).join('');
   return `<div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px">
       <span class="sect">The Verdict</span>
       <div style="display:flex;align-items:center;gap:12px">
-        <span style="display:inline-flex;align-items:center;gap:7px;font:500 11px 'Inter';color:#99A1AC"><span style="width:6px;height:6px;border-radius:50%;background:#5FB37A;box-shadow:0 0 8px #5FB37A"></span>weekly read</span>
+        <span style="display:inline-flex;align-items:center;gap:7px;font:500 11px system-ui;color:#a1a1a8"><span style="width:6px;height:6px;border-radius:50%;background:#30d158;box-shadow:0 0 8px #30d158"></span>weekly read</span>
         <span class="qbtn" onclick="toggleRules()" title="Rules of Evidence">?</span>
       </div>
     </div>
@@ -621,32 +619,32 @@ function verdictPanel(r){
     <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
       <div style="display:flex;align-items:flex-end;gap:15px">
         <div class="zoneName" style="color:${zColor};text-shadow:0 0 34px ${rgba(zColor,.3)}">${zone.toUpperCase()}</div>
-        ${(!S.simple&&(location.hostname==='localhost'||location.hostname==='127.0.0.1'))?`<div style="font:10.5px/1.5 'JetBrains Mono',monospace;color:#586170;padding-bottom:7px">composite<br><span style="color:#99A1AC;font-size:13px">${r.composite.toFixed(2)}</span> · internal</div>`:''}
+        ${(!S.simple&&(location.hostname==='localhost'||location.hostname==='127.0.0.1'))?`<div style="font:10.5px/1.5 ui-monospace,monospace;color:#6e6e76;padding-bottom:7px">composite<br><span style="color:#a1a1a8;font-size:13px">${r.composite.toFixed(2)}</span> · internal</div>`:''}
       </div>
-      ${r.div.on?`<div class="divchip"><span class="divsq"></span><span style="font:600 11px 'Inter';letter-spacing:.04em;color:#D9BEF2">DIVERGENCE ON</span></div>`:''}
+      ${r.div.on?`<div class="divchip"><span class="divsq"></span><span style="font:600 11px system-ui;letter-spacing:.04em;color:#D9BEF2">DIVERGENCE ON</span></div>`:''}
     </div>
     <div style="position:relative;margin-top:22px">
       <div class="ticks">${ticks}</div>
-      <div class="band"><div class="marker" style="left:${pct}%"><div class="halo"></div><div class="stem"></div><div class="knob" style="box-shadow:0 0 0 3px #181C22,0 0 0 4.5px ${rgba(zColor,.55)}"></div></div></div>
+      <div class="band"><div class="marker" style="left:${pct}%"><div class="halo"></div><div class="stem"></div><div class="knob" style="box-shadow:0 0 0 3px #1b1b1f,0 0 0 4.5px ${rgba(zColor,.55)}"></div></div></div>
       <div class="zlabels">${zlabels}</div>
       ${(()=>{const RL=r.rel||REL[r.id];if(!RL)return '';
         const dis=(r.composite>=0.6)!==(RL.pct>=0.6)&&Math.abs(r.composite-RL.pct)>0.25;
         if(S.simple){const near=RL.pct<.34?'near the bottom of':RL.pct<.66?'mid-range within':'near the top of';
-          return `<div style="margin-top:12px;font:12px/1.5 'Inter';color:#8A93A0">Vs its own last 4 years, BTC sits <b style="color:#C6CCD3">${near}</b> that range${dis?` — <b style="color:#E8A13A">though the two views disagree</b>, worth noting`:''}.</div>`;}
-        return `<div style="margin-top:12px;font:11px 'JetBrains Mono',monospace;color:#586170">relative lens (4y pctile): <span style="color:#99A1AC">${RL.band.toUpperCase()} ${RL.pct.toFixed(2)}</span> · ${dis?`<span style="color:#E8A13A;font-weight:600">LENSES DISAGREE</span>`:`lenses agree`}</div>`;})()}
+          return `<div style="margin-top:12px;font:12px/1.5 system-ui;color:#98989d">Vs its own last 4 years, BTC sits <b style="color:#d5d5da">${near}</b> that range${dis?` — <b style="color:#ff9f0a">though the two views disagree</b>, worth noting`:''}.</div>`;}
+        return `<div style="margin-top:12px;font:11px ui-monospace,monospace;color:#6e6e76">relative lens (4y pctile): <span style="color:#a1a1a8">${RL.band.toUpperCase()} ${RL.pct.toFixed(2)}</span> · ${dis?`<span style="color:#ff9f0a;font-weight:600">LENSES DISAGREE</span>`:`lenses agree`}</div>`;})()}
     </div>
-    <div class="vmeta"><span>${r.date}</span><span class="vsep"></span><span class="pill">method v1.0</span><span class="vsep"></span><span>BTC <span style="color:#E9ECEF">${r.price}</span></span></div>
+    <div class="vmeta"><span>${r.date}</span><span class="vsep"></span><span class="pill">method v1.0</span><span class="vsep"></span><span>BTC <span style="color:#f5f5f7">${r.price}</span></span></div>
     ${S.showRules?rulesPopover():''}
   </div>`;
 }
-function rulesPopover(){return `<div style="margin-top:16px;padding:16px 18px;border-radius:12px;background:#13161B;border:1px solid #2A2F38;animation:expandIn .3s ease both">
+function rulesPopover(){return `<div style="margin-top:16px;padding:16px 18px;border-radius:12px;background:#161619;border:1px solid rgba(255,255,255,.09);animation:expandIn .3s ease both">
   <div class="sect" style="margin-bottom:12px">Rules of Evidence — the three tiers</div>
   <div style="display:flex;flex-direction:column;gap:10px">
-    <div style="display:flex;gap:11px;align-items:baseline"><span style="font:600 10px 'Inter';letter-spacing:.05em;color:#C6CCD3;min-width:82px">MECHANISM</span><span style="font:13px/1.5 'Inter';color:#99A1AC">Why it should work — a causal chain. Strongest; survives regime change.</span></div>
-    <div style="display:flex;gap:11px;align-items:baseline"><span style="font:500 10px 'Inter';letter-spacing:.05em;color:#99A1AC;min-width:82px">BASE RATE</span><span style="font:13px/1.5 'Inter';color:#99A1AC">In <span class="mono">n</span> prior instances, an outcome followed — the <span class="mono">n</span> is always shown.</span></div>
-    <div style="display:flex;gap:11px;align-items:baseline"><span style="font:italic 400 10px 'Inter';letter-spacing:.05em;color:#6B7280;min-width:82px">STORY</span><span style="font:13px/1.5 'Inter';color:#99A1AC">“This looks like …”. Weakest — colour only, labelled a story.</span></div>
+    <div style="display:flex;gap:11px;align-items:baseline"><span style="font:600 10px system-ui;letter-spacing:.05em;color:#d5d5da;min-width:82px">MECHANISM</span><span style="font:13px/1.5 system-ui;color:#a1a1a8">Why it should work — a causal chain. Strongest; survives regime change.</span></div>
+    <div style="display:flex;gap:11px;align-items:baseline"><span style="font:500 10px system-ui;letter-spacing:.05em;color:#a1a1a8;min-width:82px">BASE RATE</span><span style="font:13px/1.5 system-ui;color:#a1a1a8">In <span class="mono">n</span> prior instances, an outcome followed — the <span class="mono">n</span> is always shown.</span></div>
+    <div style="display:flex;gap:11px;align-items:baseline"><span style="font:italic 400 10px system-ui;letter-spacing:.05em;color:#8e8e95;min-width:82px">STORY</span><span style="font:13px/1.5 system-ui;color:#a1a1a8">“This looks like …”. Weakest — colour only, labelled a story.</span></div>
   </div>
-  <div style="margin-top:13px;padding-top:12px;border-top:1px solid #23272F;font:italic 400 12px/1.5 'Inter';color:#6B7280">Show the zone, not the decimal · state-signals only, never trade-signals · the caveat is part of the claim.</div>
+  <div style="margin-top:13px;padding-top:12px;border-top:1px solid rgba(255,255,255,.055);font:italic 400 12px/1.5 system-ui;color:#8e8e95">Show the zone, not the decimal · state-signals only, never trade-signals · the caveat is part of the claim.</div>
 </div>`;}
 
 function macroPanel(r){
@@ -660,46 +658,46 @@ function macroPanel(r){
   return `<div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px">
       <span class="sect">Macro backdrop <span class="llchip" style="margin-left:6px">leads</span></span>
-      <span class="mstate" style="background:${rgba(col,.12)};border:1px solid ${rgba(col,.45)}"><span style="font:600 11px 'Inter';letter-spacing:.06em;color:${col}">${m.state.toUpperCase()}</span><span style="font-size:12px;color:${col}">${MARR[m.state]}</span></span>
+      <span class="mstate" style="background:${rgba(col,.12)};border:1px solid ${rgba(col,.45)}"><span style="font:600 11px system-ui;letter-spacing:.06em;color:${col}">${m.state.toUpperCase()}</span><span style="font-size:12px;color:${col}">${MARR[m.state]}</span></span>
     </div>
     <div class="mgrid">${tiles}</div>
-    <div style="margin-top:13px;font:italic 400 12px/1.5 'Inter';color:#6B7280">${S.simple?'The big-money backdrop — read alongside the gauges, not mixed into them.':'Derived 3-state — reads <em>beside</em> the composite, never folded into it.'}</div>
+    <div style="margin-top:13px;font:italic 400 12px/1.5 system-ui;color:#8e8e95">${S.simple?'The big-money backdrop — read alongside the gauges, not mixed into them.':'Derived 3-state — reads <em>beside</em> the composite, never folded into it.'}</div>
   </div>`;
 }
 
 function dialsPanel(r){
   const rows=r.dials.map(d=>{
-    const tierColor=d.tier==='mechanism'?'#C6CCD3':d.tier==='base'?'#99A1AC':'#6B7280';
+    const tierColor=d.tier==='mechanism'?'#d5d5da':d.tier==='base'?'#a1a1a8':'#8e8e95';
     const tierWeight=d.tier==='mechanism'?600:d.tier==='base'?500:400;
-    const tierBorder=d.tier==='story'?'1px dashed #2A2F38':'1px solid #2A2F38';
+    const tierBorder=d.tier==='story'?'1px dashed rgba(255,255,255,.09)':'1px solid rgba(255,255,255,.09)';
     const exp=S.expanded===d.key,pop=S.pop===d.key;
     return `<div class="dial">
       <div class="dial-row" onclick="toggleDial('${d.key}')">
         <div class="dial-label">${d.label}</div>
-        <div class="dial-read"><span class="r" style="color:${d.na?'#586170':'#E9ECEF'}">${esc(d.reading)}</span><span style="font-size:12px;color:#6B7280">${ARR[d.dir]}</span><div class="dtip">${d.detail}</div></div>
+        <div class="dial-read"><span class="r" style="color:${d.na?'#6e6e76':'#f5f5f7'}">${esc(d.reading)}</span><span style="font-size:12px;color:#8e8e95">${ARR[d.dir]}</span><div class="dtip">${d.detail}</div></div>
         <div style="flex:1;min-width:0"></div>
         <div style="position:relative;display:flex;align-items:center;gap:9px">
           ${S.simple?'':`<span class="tier" style="color:${tierColor};border:${tierBorder};font-weight:${tierWeight};font-style:${d.tier==='story'?'italic':'normal'}" onclick="toggleTier('${d.key}',event)">${TTXT[d.tier]}</span>
           <span class="dial-n">${d.n}</span>
           <span class="llchip">${LL[d.key]||''}</span>`}
           <span class="chev" style="transform:${exp?'rotate(180deg)':'rotate(0deg)'}">▾</span>
-          ${pop?`<div class="pop"><div style="font:600 9.5px 'Inter';letter-spacing:.08em;color:#8A93A0;margin-bottom:7px">EVIDENCE · ${TTXT[d.tier]}</div><div style="font:12.5px/1.5 'Inter';color:#C6CCD3;margin-bottom:9px">${TDEF[d.tier]}</div><div style="padding-top:9px;border-top:1px solid #23272F;font:italic 400 12px/1.45 'Inter';color:#8A93A0">Caveat — ${d.caveat}</div></div>`:''}
+          ${pop?`<div class="pop"><div style="font:600 9.5px system-ui;letter-spacing:.08em;color:#98989d;margin-bottom:7px">EVIDENCE · ${TTXT[d.tier]}</div><div style="font:12.5px/1.5 system-ui;color:#d5d5da;margin-bottom:9px">${TDEF[d.tier]}</div><div style="padding-top:9px;border-top:1px solid rgba(255,255,255,.055);font:italic 400 12px/1.45 system-ui;color:#98989d">Caveat — ${d.caveat}</div></div>`:''}
         </div>
       </div>
-      <div class="dial-mean">${S.simple&&PLAIN_DIAL[d.key]?`${PLAIN_DIAL[d.key]}. <span style="color:#C6CCD3">${esc(d.meaning)}</span>`:esc(d.meaning)}</div>
+      <div class="dial-mean">${S.simple&&PLAIN_DIAL[d.key]?`${PLAIN_DIAL[d.key]}. <span style="color:#d5d5da">${esc(d.meaning)}</span>`:esc(d.meaning)}</div>
       ${exp?`<div class="expand" style="animation:expandIn .32s cubic-bezier(.22,1,.36,1) both"><div class="inner">
-        <div style="font:600 9.5px 'Inter';letter-spacing:.1em;text-transform:uppercase;color:#586170;margin-bottom:7px">Post angle — the teachable line</div>
+        <div style="font:600 9.5px system-ui;letter-spacing:.1em;text-transform:uppercase;color:#6e6e76;margin-bottom:7px">Post angle — the teachable line</div>
         <p class="post">“${esc(d.post||d.meaning)}”</p>
-        <div style="font:12px/1.5 'Inter';color:#8A93A0"><span style="color:#6B7280">How it reads: </span>${d.detail}</div>
-        <div style="margin-top:9px;padding-top:10px;border-top:1px solid #23272F;font:italic 400 11.5px/1.45 'Inter';color:#6B7280">Caveat — ${d.caveat}</div>
+        <div style="font:12px/1.5 system-ui;color:#98989d"><span style="color:#8e8e95">How it reads: </span>${d.detail}</div>
+        <div style="margin-top:9px;padding-top:10px;border-top:1px solid rgba(255,255,255,.055);font:italic 400 11.5px/1.45 system-ui;color:#8e8e95">Caveat — ${d.caveat}</div>
       </div></div>`:''}
     </div>`;}).join('');
   const ref=(r.ref||REF[r.id]||[]).map(x=>S.simple
-    ? `<div style="padding:9px 0;border-top:1px solid #20242b">
+    ? `<div style="padding:9px 0;border-top:1px solid rgba(255,255,255,.055)">
          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
-           <span style="font:600 12.5px 'Inter';color:#C6CCD3">${PLAIN_REF[x.name]||x.name}</span>
-           <span style="font:12px 'JetBrains Mono',monospace;color:#E9ECEF;white-space:nowrap">${x.reading}</span></div>
-         <div style="font:12px 'Inter';color:#8A93A0;margin-top:2px">${x.state}</div>
+           <span style="font:600 12.5px system-ui;color:#d5d5da">${PLAIN_REF[x.name]||x.name}</span>
+           <span style="font:12px ui-monospace,monospace;color:#f5f5f7;white-space:nowrap">${x.reading}</span></div>
+         <div style="font:12px system-ui;color:#98989d;margin-top:2px">${x.state}</div>
        </div>`
     : `<div class="refrow">
       <span class="refname">${x.name}</span><span class="refread">${x.reading}</span>
@@ -707,51 +705,51 @@ function dialsPanel(r){
       ${x.note?`<span class="refnote">${x.note}</span>`:''}
     </div>`).join('');
   const refBlock=ref?`<div class="sect" style="margin:18px 0 4px">${S.simple?'Supporting signals · plain English':'Reference layer · vetted instruments'}</div>
-    ${S.simple?'':`<div style="font:italic 400 11px/1.4 'Inter';color:var(--faint2);margin-bottom:4px">Consulted, not stared at — verdicts ride on each row. Vetted out: Pi Cycle (data-mined; no fire 2025), active addresses (decoupled).</div>`}${ref}`:'';
+    ${S.simple?'':`<div style="font:italic 400 11px/1.4 system-ui;color:var(--faint2);margin-bottom:4px">Consulted, not stared at — verdicts ride on each row. Vetted out: Pi Cycle (data-mined; no fire 2025), active addresses (decoupled).</div>`}${ref}`:'';
   return `<div class="card"><div class="sect" style="margin-bottom:6px">${S.simple?'The main gauges':'BTC-native dials'}</div>${rows}${refBlock}</div>`;
 }
 
 function narrativePanel(r){
   const lines=r.narrative.map(n=>`<div class="narr"><span class="a">${ARR[n.dir]}</span><span class="t">${esc(n.text)}</span></div>`).join('');
-  return `<div class="card"><div class="sect" style="margin-bottom:14px">Narrative log <span style="color:#454b55">· week over week</span></div><div style="display:flex;flex-direction:column;gap:11px">${lines}</div></div>`;
+  return `<div class="card"><div class="sect" style="margin-bottom:14px">Narrative log <span style="color:#5c5c63">· week over week</span></div><div style="display:flex;flex-direction:column;gap:11px">${lines}</div></div>`;
 }
 
 function calibrationPanel(r){
-  const scoreMap={within:{label:'in band',color:'#5FB37A'},outside:{label:'out of band',color:'#E4574C'},pending:{label:'pending',color:'#6B7280'}};
+  const scoreMap={within:{label:'in band',color:'#30d158'},outside:{label:'out of band',color:'#ff453a'},pending:{label:'pending',color:'#8e8e95'}};
   const within=READS.filter(x=>x.outcome&&x.outcome.scored==='within').length;
   const outside=READS.filter(x=>x.outcome&&x.outcome.scored==='outside').length;
   const rows=READS.map(x=>{const rz=zoneOf(x.composite),o=x.outcome,sc=o?o.scored:'pending',cur=x.id===r.id;
-    return `<div class="calrow" style="background:${cur?'rgba(110,168,254,.09)':'transparent'}">
-      <span style="width:66px;font:11px 'JetBrains Mono',monospace;color:${cur?'#E9ECEF':'#8A93A0'}">${x.short}</span>
-      <span style="flex:1;display:inline-flex;align-items:center;gap:7px;min-width:0"><span style="width:8px;height:8px;border-radius:50%;flex:none;background:${ZC[rz]}"></span><span style="font:12px 'Inter';color:#99A1AC;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${rz}</span></span>
-      <span style="width:88px;font:11.5px 'JetBrains Mono',monospace;color:#C6CCD3">${o?o.range:'—'}</span>
-      <span style="width:70px;text-align:right;font:600 10px 'Inter';color:${scoreMap[sc].color}">${scoreMap[sc].label}</span>
+    return `<div class="calrow" style="background:${cur?'rgba(10,132,255,.09)':'transparent'}">
+      <span style="width:66px;font:11px ui-monospace,monospace;color:${cur?'#f5f5f7':'#98989d'}">${x.short}</span>
+      <span style="flex:1;display:inline-flex;align-items:center;gap:7px;min-width:0"><span style="width:8px;height:8px;border-radius:50%;flex:none;background:${ZC[rz]}"></span><span style="font:12px system-ui;color:#a1a1a8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${rz}</span></span>
+      <span style="width:88px;font:11.5px ui-monospace,monospace;color:#d5d5da">${o?o.range:'—'}</span>
+      <span style="width:70px;text-align:right;font:600 10px system-ui;color:${scoreMap[sc].color}">${scoreMap[sc].label}</span>
     </div>`;}).join('');
-  const pending=r.id==='live'?`<div class="pending"><div style="font:600 10px 'Inter';letter-spacing:.05em;text-transform:uppercase;color:#6EA8FE;margin-bottom:6px">Entry #1 · pending</div><div style="font:12.5px/1.5 'Inter';color:#C6CCD3;margin-bottom:9px">Outcome resolves at 4 / 8 / 12 weeks. Calibration builds as weeks pass.</div><div style="font:12px/1.45 'Inter';color:#8A93A0"><span style="color:#6B7280">Invalidation line — </span>${esc(r.invalidation)}</div></div>`:'';
+  const pending=r.id==='live'?`<div class="pending"><div style="font:600 10px system-ui;letter-spacing:.05em;text-transform:uppercase;color:#0a84ff;margin-bottom:6px">Entry #1 · pending</div><div style="font:12.5px/1.5 system-ui;color:#d5d5da;margin-bottom:9px">Outcome resolves at 4 / 8 / 12 weeks. Calibration builds as weeks pass.</div><div style="font:12px/1.45 system-ui;color:#98989d"><span style="color:#8e8e95">Invalidation line — </span>${esc(r.invalidation)}</div></div>`:'';
   return `<div class="card">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px"><span class="sect">Calibration log <span style="color:#454b55">· private</span></span><span style="font:10px 'JetBrains Mono',monospace;color:#586170">${within} in band · ${outside} out · n=${within+outside}</span></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px"><span class="sect">Calibration log <span style="color:#5c5c63">· private</span></span><span style="font:10px ui-monospace,monospace;color:#6e6e76">${within} in band · ${outside} out · n=${within+outside}</span></div>
     ${pending}
     <div class="calhead"><span style="width:66px">Pivot</span><span style="flex:1">Zone called</span><span style="width:88px">Forward</span><span style="width:70px;text-align:right">Scored</span></div>
     ${rows}
-    <div style="margin-top:12px;font:italic 400 11.5px/1.45 'Inter';color:#6B7280">Retrospective back-test — the live track record starts with the 2026-07-01 entry. Outcomes are ranges of real forward price, framed as state, never trade calls.</div>
+    <div style="margin-top:12px;font:italic 400 11.5px/1.45 system-ui;color:#8e8e95">Retrospective back-test — the live track record starts with the 2026-07-01 entry. Outcomes are ranges of real forward price, framed as state, never trade calls.</div>
   </div>`;
 }
 
 /* Phases 9.1-9.3 — the Post radar: what's worth posting now, ranked, each card
    opening the ready draft. Detailed + live read only (a creator tool). */
-const RBADGE={ALERT:{c:'#E4574C',t:'ALERT'},SCORECARD:{c:'#6EA8FE',t:'SCORECARD'},
-  HISTORY:{c:'#5FB37A',t:'HISTORY'},WEEKLY:{c:'#E8A13A',t:'WEEKLY'},
-  GLANCE:{c:'#21B8A6',t:'GLANCE'},'FIELD NOTE':{c:'#9BA6A0',t:'FIELD NOTE'}};
+const RBADGE={ALERT:{c:'#ff453a',t:'ALERT'},SCORECARD:{c:'#0a84ff',t:'SCORECARD'},
+  HISTORY:{c:'#30d158',t:'HISTORY'},WEEKLY:{c:'#ff9f0a',t:'WEEKLY'},
+  GLANCE:{c:'#66d4cf',t:'GLANCE'},'FIELD NOTE':{c:'#98989d',t:'FIELD NOTE'}};
 function pcard(title,text,copyJs,long){
   const n=text.length, over=!long&&n>280;
   return `<div style="padding:11px 13px;border-radius:10px;background:var(--panel3);border:1px solid var(--border2);display:flex;flex-direction:column;gap:7px">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-      <span style="font:600 10px 'Inter';letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">${title}</span>
+      <span style="font:600 10px system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">${title}</span>
       <span style="display:flex;align-items:center;gap:8px">
-        <span style="font:10px 'JetBrains Mono',monospace;color:${over?'#E8A13A':'#586170'}">${long?n+' chars':n+'/280'}</span>
-        <button onclick="${copyJs}" style="cursor:pointer;font:600 10px 'Inter';color:var(--muted);background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:3px 9px">copy</button>
+        <span style="font:10px ui-monospace,monospace;color:${over?'#ff9f0a':'#6e6e76'}">${long?n+' chars':n+'/280'}</span>
+        <button onclick="${copyJs}" style="cursor:pointer;font:600 10px system-ui;color:var(--muted);background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:3px 9px">copy</button>
       </span></div>
-    <div style="font:12.5px/1.55 'Inter';color:#C6CCD3;white-space:pre-wrap">${esc(text)}</div></div>`;
+    <div style="font:12.5px/1.55 system-ui;color:#d5d5da;white-space:pre-wrap">${esc(text)}</div></div>`;
 }
 function radarPanel(r){
   if(r.id!=='live'||S.simple) return '';
@@ -761,23 +759,23 @@ function radarPanel(r){
   if(!RD||!RD.length) return '';
   const draftBlock=c=>{
     if(c.target==='thread'){
-      if(!P||!P.thread||!P.thread.length) return `<div style="font:italic 12px 'Inter';color:var(--faint2)">The weekly thread is in Post studio below.</div>`;
+      if(!P||!P.thread||!P.thread.length) return `<div style="font:italic 12px system-ui;color:var(--faint2)">The weekly thread is in Post studio below.</div>`;
       return P.thread.map((t,i)=>pcard(`thread ${i+1}/${P.thread.length}`,t,`copyPost('thread',${i},this)`)).join('');
     }
     const key=c.target.split(':')[1], s=SR&&SR[key];
-    if(!s) return `<div style="font:italic 12px 'Inter';color:var(--faint2)">Draft not available this week.</div>`;
+    if(!s) return `<div style="font:italic 12px system-ui;color:var(--faint2)">Draft not available this week.</div>`;
     let out=pcard('X post',s.x,`copySeries('${key}','x',this)`);
     if(s.newsletter) out+=pcard('Newsletter long-form',s.newsletter,`copySeries('${key}','news',this)`,true);
     return out;
   };
   const cards=RD.map((c,i)=>{
-    const b=RBADGE[c.badge]||{c:'#9BA6A0',t:c.badge}, open=S.radarOpen[i];
+    const b=RBADGE[c.badge]||{c:'#98989d',t:c.badge}, open=S.radarOpen[i];
     return `<div style="border:1px solid var(--border2);border-radius:12px;overflow:hidden;background:var(--panel2)">
       <div onclick="toggleRadar(${i})" style="display:flex;align-items:center;gap:11px;padding:12px 13px;cursor:pointer;user-select:none">
-        <span style="flex:none;font:700 9px 'Inter';letter-spacing:.06em;color:#0c0e12;background:${b.c};border-radius:5px;padding:3px 7px">${b.t}</span>
+        <span style="flex:none;font:700 9px system-ui;letter-spacing:.06em;color:#0c0e12;background:${b.c};border-radius:5px;padding:3px 7px">${b.t}</span>
         <div style="flex:1;min-width:0">
-          <div style="font:600 13px/1.35 'Inter';color:#E9ECEF">${esc(c.title)}</div>
-          <div style="font:12px/1.4 'Inter';color:#8A93A0;margin-top:2px">${esc(c.why)}</div>
+          <div style="font:600 13px/1.35 system-ui;color:#f5f5f7">${esc(c.title)}</div>
+          <div style="font:12px/1.4 system-ui;color:#98989d;margin-top:2px">${esc(c.why)}</div>
         </div>
         <span class="chev" style="flex:none;transform:rotate(${open?90:0}deg);color:var(--faint2);font-size:12px">▸</span>
       </div>
@@ -786,10 +784,10 @@ function radarPanel(r){
   }).join('');
   return `<div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px">
-      <span class="sect">Post radar <span style="color:#454b55">· what's worth posting now</span></span>
-      <span style="font:10px 'JetBrains Mono',monospace;color:#586170">${RD.length} ranked · gate-checked</span>
+      <span class="sect">Post radar <span style="color:#5c5c63">· what's worth posting now</span></span>
+      <span style="font:10px ui-monospace,monospace;color:#6e6e76">${RD.length} ranked · gate-checked</span>
     </div>
-    <div style="font:italic 400 11px/1.5 'Inter';color:var(--faint2);margin-bottom:11px">Ranked by rarity — alerts and matured windows first, the weekly anchor always there. Open a card for the ready draft. Silent when nothing's material.</div>
+    <div style="font:italic 400 11px/1.5 system-ui;color:var(--faint2);margin-bottom:11px">Ranked by rarity — alerts and matured windows first, the weekly anchor always there. Open a card for the ready draft. Silent when nothing's material.</div>
     <div style="display:flex;flex-direction:column;gap:9px">${cards}</div>
   </div>`;
 }
@@ -808,13 +806,13 @@ function postsPanel(r){
     const n=text.length, over=n>280;
     return `<div style="padding:12px 14px;border-radius:11px;background:var(--panel3);border:1px solid var(--border2);display:flex;flex-direction:column;gap:8px">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-        <span style="font:600 10px 'Inter';letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">${title}</span>
+        <span style="font:600 10px system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">${title}</span>
         <span style="display:flex;align-items:center;gap:8px">
-          <span style="font:10px 'JetBrains Mono',monospace;color:${over?'#E8A13A':'#586170'}">${n}/280</span>
-          <button onclick="copyPost('${kind}',${idx},this)" style="cursor:pointer;font:600 10px 'Inter';color:var(--muted);background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:3px 9px">copy</button>
+          <span style="font:10px ui-monospace,monospace;color:${over?'#ff9f0a':'#6e6e76'}">${n}/280</span>
+          <button onclick="copyPost('${kind}',${idx},this)" style="cursor:pointer;font:600 10px system-ui;color:var(--muted);background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:3px 9px">copy</button>
         </span>
       </div>
-      <div style="font:13px/1.55 'Inter';color:#C6CCD3;white-space:pre-wrap">${text}</div>
+      <div style="font:13px/1.55 system-ui;color:#d5d5da;white-space:pre-wrap">${text}</div>
     </div>`;
   };
   const grid=inner=>`<div class="poststrip">${inner}</div>`;
@@ -824,7 +822,7 @@ function postsPanel(r){
       <div onclick="toggleStudio('${key}')" style="display:flex;align-items:center;gap:9px;padding:13px 2px 12px;cursor:pointer;user-select:none">
         <span class="chev" style="transform:rotate(${open?90:0}deg);color:var(--faint2);font-size:11px">▸</span>
         <span class="sect" style="font-size:10px">${label}</span>
-        <span style="font:10px 'JetBrains Mono',monospace;color:#586170">${count}</span>
+        <span style="font:10px ui-monospace,monospace;color:#6e6e76">${count}</span>
       </div>
       ${open?`<div style="padding:0 0 16px;animation:expandIn .3s ease both">${grid(inner)}</div>`:''}
     </div>`;
@@ -832,13 +830,13 @@ function postsPanel(r){
   const thread=P.thread.map((t,i)=>card('thread',i,`thread ${i+1}/${P.thread.length}`,t)).join('');
   const signals=P.signals.map((p,i)=>card('signals',i,p.name,p.text)).join('');
   const combos=P.combos.length?P.combos.map((p,i)=>card('combos',i,'⚡ '+p.name,p.text)).join('')
-    :`<div style="font:italic 400 12px 'Inter';color:var(--faint2);padding:4px 2px">No combo conditions met this week — combos fire only when related signals line up.</div>`;
+    :`<div style="font:italic 400 12px system-ui;color:var(--faint2);padding:4px 2px">No combo conditions met this week — combos fire only when related signals line up.</div>`;
   return `<div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px">
-      <span class="sect">Post studio <span style="color:#454b55">· drafts from the live read</span></span>
-      <span style="font:10px 'JetBrains Mono',monospace;color:#586170">gate-checked · nothing auto-posts</span>
+      <span class="sect">Post studio <span style="color:#5c5c63">· drafts from the live read</span></span>
+      <span style="font:10px ui-monospace,monospace;color:#6e6e76">gate-checked · nothing auto-posts</span>
     </div>
-    <div style="font:italic 400 11px/1.5 'Inter';color:var(--faint2);margin-bottom:6px">Regenerated with each data refresh — when the panel changes materially, so do these. Edit before posting.</div>
+    <div style="font:italic 400 11px/1.5 system-ui;color:var(--faint2);margin-bottom:6px">Regenerated with each data refresh — when the panel changes materially, so do these. Edit before posting.</div>
     ${section('thread','The weekly thread',`${P.thread.length} posts`,thread)}
     ${section('signals','Single-signal posts',`${P.signals.length} posts`,signals)}
     ${section('combos','Combo posts · fired by current conditions',P.combos.length?`${P.combos.length} live`:'none this week',combos)}
@@ -846,10 +844,10 @@ function postsPanel(r){
 }
 
 function mathsPanel(){
-  const row=(k,v)=>`<div style="display:flex;gap:12px;align-items:baseline;padding:8px 0;border-top:1px solid #20242b;flex-wrap:wrap">
-    <span style="min-width:150px;font:600 11px 'Inter';color:var(--muted)">${k}</span>
-    <span style="flex:1;font:13px/1.5 'Inter';color:#C6CCD3;min-width:240px">${v}</span></div>`;
-  return `<div class="card"><div class="sect" style="margin-bottom:6px">Cycle mathematics <span style="color:#454b55">· tested on the locked spine</span></div>
+  const row=(k,v)=>`<div style="display:flex;gap:12px;align-items:baseline;padding:8px 0;border-top:1px solid rgba(255,255,255,.055);flex-wrap:wrap">
+    <span style="min-width:150px;font:600 11px system-ui;color:var(--muted)">${k}</span>
+    <span style="flex:1;font:13px/1.5 system-ui;color:#d5d5da;min-width:240px">${v}</span></div>`;
+  return `<div class="card"><div class="sect" style="margin-bottom:6px">Cycle mathematics <span style="color:#5c5c63">· tested on the locked spine</span></div>
     ${row('Lengthening cycles','<span class="mono">371 → 525 → 546 → 534</span> days halving→top (n=4) — lengthened for three cycles, then <b>plateaued</b> in the ETF era.')}
     ${row('Diminishing returns','<span class="mono">111.8× → 21.2× → 7.9×</span> bottom→top (n=3) — clean decay; every dial’s top extremity shrinks in step (Mayer 5.71→1.18, composite 0.93→0.47).')}
     ${row('Two lenses','Absolute vs rolling-4y-percentile agree at 6 of 7 pivots. The 2025 top is the split — <b>mid-cycle</b> absolute, <b>top band</b> relative. The split is the content.')}
@@ -961,10 +959,10 @@ function jrScene(ctx,W,H,t,r,layer){
   for(let i=0;i<3;i++){const y=wy+3+i*((H-wy)/3.4)+Math.sin(t/1600+i)*1.2;
     ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
   const rising=(r.macro&&r.macro.netLiqTrend)==='rising';
-  ctx.fillStyle='rgba(170,200,230,.55)';ctx.font=`${Math.max(9,W/120)}px 'JetBrains Mono',monospace`;
+  ctx.fillStyle='rgba(170,200,230,.55)';ctx.font=`${Math.max(9,W/120)}px ui-monospace,monospace`;
   ctx.fillText(`the tide ${rising?'▲ rising':'▼ falling'}`,8,H-6);
   tmIndex();                                              // LABELS — the real pivots
-  if(PIVW){ctx.font=`600 ${Math.max(10,W/105)}px 'Inter',sans-serif`;ctx.textAlign='center';
+  if(PIVW){ctx.font=`600 ${Math.max(10,W/105)}px system-ui,sans-serif`;ctx.textAlign='center';
     const lb=H*.92, ls=H*.55;
     for(const id in PIVW){
       if(id==='live')continue;
@@ -977,14 +975,14 @@ function jrScene(ctx,W,H,t,r,layer){
   const bi=jrIdx(d), bb=H*.92, bs=H*.55;                  // BEACON — you are here
   const bx=bi/(d.n-1)*W, by=bb-d.px[bi]*bs;
   const pg=ctx.createLinearGradient(0,by-H*.30,0,by);
-  pg.addColorStop(0,'rgba(110,168,254,0)');pg.addColorStop(1,'rgba(110,168,254,.5)');
+  pg.addColorStop(0,'rgba(10,132,255,0)');pg.addColorStop(1,'rgba(10,132,255,.5)');
   ctx.fillStyle=pg;ctx.fillRect(bx-1.5,by-H*.30,3,H*.30);
   ctx.fillStyle='#BFD7FF';ctx.beginPath();ctx.arc(bx,by,2.6,0,7);ctx.fill();
   ctx.strokeStyle='rgba(150,190,255,.5)';ctx.lineWidth=1.4;
   ctx.beginPath();ctx.arc(bx,by,5.7+Math.sin(t/420)*1.6,0,7);ctx.stroke();
-  ctx.font=`600 ${Math.max(10,W/105)}px 'Inter',sans-serif`;ctx.textAlign=bx>W*.75?'right':'left';
+  ctx.font=`600 ${Math.max(10,W/105)}px system-ui,sans-serif`;ctx.textAlign=bx>W*.75?'right':'left';
   const lx=bx+(bx>W*.75?-10:10);
-  ctx.fillStyle='#E9ECEF';ctx.fillText(S.scrub!=null?`week of ${r.date}`:'you are here',lx,by-H*.31);
+  ctx.fillStyle='#f5f5f7';ctx.fillText(S.scrub!=null?`week of ${r.date}`:'you are here',lx,by-H*.31);
   ctx.fillStyle='#9fb3cd';ctx.fillText(`${r.price}`,lx,by-H*.31+Math.max(13,W/80));
   ctx.textAlign='left';
   if(r.div&&r.div.on){                                    // LIGHTNING — divergence flag
@@ -1024,10 +1022,10 @@ function jrSnap(){
   const ctx=c.getContext('2d');
   jrScene(ctx,W,H,1200,r,null);
   ctx.fillStyle='#0b0d11';ctx.fillRect(0,H,W,pad);
-  const zone=zoneOf(r.composite);
-  ctx.fillStyle='#E9ECEF';ctx.font="700 38px 'Inter',sans-serif";
+  const zone=zoneFor(r);
+  ctx.fillStyle='#f5f5f7';ctx.font="700 38px system-ui,sans-serif";
   ctx.fillText(`${r.date} · BTC ${r.price} · ${zone.toUpperCase()}`,36,H+46);
-  ctx.fillStyle='#99A1AC';ctx.font="24px 'Inter',sans-serif";
+  ctx.fillStyle='#a1a1a8';ctx.font="24px system-ui,sans-serif";
   ctx.fillText(`${PLAIN_ZONE[zone]||''} · macro: ${PLAIN_MSTATE[r.macro.state]||r.macro.state}`,36,H+84);
   c.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);
     a.download=`journey-${r.date}.png`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000);});
@@ -1048,7 +1046,7 @@ function journeyPanel(r){
   ].filter(Boolean);
   return `<div class="card jrcard">
     <div class="jrtop">
-      <span class="sect">The journey <span style="color:#454b55">· 16 years of bitcoin as one landscape</span></span>
+      <span class="sect">The journey <span style="color:#5c5c63">· 16 years of bitcoin as one landscape</span></span>
       <span class="jrbtns">
         <button class="jrbtn" onclick="jrSnap()">⤓ save image</button>
         <button class="jrbtn" onclick="jrFull()">⛶ fullscreen</button>
@@ -1064,14 +1062,14 @@ function modeToggle(){return `<div class="modetog">
   <span onclick="toggleSimple(true)" class="${S.simple?'on':''}">Simple</span>
   <span onclick="toggleSimple(false)" class="${S.simple?'':'on'}">Detailed</span>
 </div>`;}
-function masthead(r){const zone=zoneOf(r.composite);return `<div class="mast">
+function masthead(r){const zone=zoneFor(r);return `<div class="mast">
   <div><div class="brand"><h1 class="serif">The Cockpit</h1><span class="badge">private</span></div>
   <div class="tag">A private Bitcoin cycle-reading dashboard · reading the tide, not calling the top</div>
   <div style="margin-top:10px">${modeToggle()}</div></div>
   <div style="text-align:right"><div class="nowlbl">Now reading</div>
-    <div style="display:flex;align-items:center;gap:9px;justify-content:flex-end;margin-top:6px"><span style="width:9px;height:9px;border-radius:50%;background:${ZC[zone]};box-shadow:0 0 10px ${ZC[zone]}"></span><span style="font:14px 'JetBrains Mono',monospace">${r.label}</span></div>
-    <div style="font:11px 'JetBrains Mono',monospace;color:#6B7280;margin-top:4px">${r.date} · ${zone.toUpperCase()} · BTC ${r.price}</div>
-    ${window.COCKPIT_LIVE&&window.COCKPIT_LIVE.generated?`<div style="font:10px 'JetBrains Mono',monospace;color:#454b55;margin-top:3px">live feed · updated ${window.COCKPIT_LIVE.generated}</div>`:''}
+    <div style="display:flex;align-items:center;gap:9px;justify-content:flex-end;margin-top:6px"><span style="width:9px;height:9px;border-radius:50%;background:${ZC[zone]};box-shadow:0 0 10px ${ZC[zone]}"></span><span style="font:14px ui-monospace,monospace">${r.label}</span></div>
+    <div style="font:11px ui-monospace,monospace;color:#8e8e95;margin-top:4px">${r.date} · ${zone.toUpperCase()} · BTC ${r.price}</div>
+    ${window.COCKPIT_LIVE&&window.COCKPIT_LIVE.generated?`<div style="font:10px ui-monospace,monospace;color:#5c5c63;margin-top:3px">live feed · updated ${window.COCKPIT_LIVE.generated}</div>`:''}
     ${PULLSRV?`<div style="margin-top:7px"><span class="pullbtn${PULLING?' on':''}" onclick="pullNow()">${PULLING?'⟳ pulling fresh data — about a minute…':'⟳ pull fresh data'}</span></div>`:''}
   </div></div>`;}
 
@@ -1084,7 +1082,7 @@ function render(){
     masthead(r)+(S.simple?journeyPanel(r):'')+verdictPanel(r)+timeMachine()+
     `<div class="cols"><div class="col">${macroPanel(r)}${dialsPanel(r)}</div><div class="col">${rightCol}</div></div>`+
     below+
-    (S.simple?`<div style="font:12px/1.6 'Inter';color:var(--faint2);text-align:center;padding-top:6px">Switch to <b>Detailed</b> (top-left) for the evidence tiers, sample sizes, post drafts and calibration record.</div>`:'')+
+    (S.simple?`<div style="font:12px/1.6 system-ui;color:var(--faint2);text-align:center;padding-top:6px">Switch to <b>Detailed</b> (top-left) for the evidence tiers, sample sizes, post drafts and calibration record.</div>`:'')+
     `<div class="footer">Sources: Coin Metrics community · FRED · alternative.me. The composite reads as a zone, never a decimal. Historical calibration is a retrospective back-test; the live record began 2026-07-01. Context and education, not financial advice.</div>`;
   if(!MOUNTED){  // subtle entrance — first paint only, so interactions don't re-animate
     [...app.children].forEach((c,i)=>{c.style.animation='panelIn .55s cubic-bezier(.22,1,.36,1) both';c.style.animationDelay=(Math.min(i,7)*0.055)+'s';});
