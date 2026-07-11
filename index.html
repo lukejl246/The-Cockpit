@@ -153,6 +153,11 @@
   .plainbox{margin:0 0 20px;padding:15px 17px;border-radius:12px;background:rgba(110,168,254,.07);border:1px solid rgba(110,168,254,.22);font:15px/1.6 'Inter';color:#D8DDE3}
   .plainbox .lead{display:block;font:600 9.5px 'Inter';letter-spacing:.14em;text-transform:uppercase;color:#6EA8FE;margin-bottom:7px}
   .plaindesc{font:italic 400 12px 'Inter';color:#8A93A0}
+  /* pull button — only appears when the local engine answers */
+  .pullbtn{cursor:pointer;display:inline-flex;align-items:center;gap:6px;font:600 10.5px 'Inter';color:var(--muted);background:var(--panel2);border:1px solid var(--border);border-radius:7px;padding:4px 11px;user-select:none}
+  .pullbtn:hover{color:#E9ECEF;border-color:#3a4150}
+  .pullbtn.on{color:#6EA8FE;border-color:rgba(110,168,254,.45);animation:pulse 1.6s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
   /* The Journey — 3D terrain hero (Simple mode) */
   .jrcard{padding:16px 16px 12px}
   .jrtop{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
@@ -397,6 +402,32 @@ function copySeries(key,which,btn){
   navigator.clipboard.writeText(text).then(()=>{btn.textContent='copied ✓';setTimeout(()=>btn.textContent='copy',1400);});
 }
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+/* pull button — talks to the localhost helper (pull_server.py). The button only
+   renders when the helper answers, i.e. on the machine that runs the engine. */
+const PULL_URL='http://127.0.0.1:8765';
+let PULLSRV=false, PULLING=false;
+(function(){try{
+  const ac=new AbortController(); setTimeout(()=>ac.abort(),1500);
+  fetch(PULL_URL+'/status',{signal:ac.signal}).then(r=>r.json())
+    .then(s=>{PULLSRV=true;PULLING=!!s.running;render();if(PULLING)pullWatch();})
+    .catch(()=>{});
+}catch(e){}})();
+function pullWatch(){
+  const poll=setInterval(()=>{
+    fetch(PULL_URL+'/status').then(r=>r.json()).then(s=>{
+      if(!s.running){clearInterval(poll);
+        Promise.all([fetch('cockpit_data.js',{cache:'reload'}),fetch('cockpit_history.js',{cache:'reload'})])
+          .catch(()=>{}).finally(()=>location.reload());}
+    }).catch(()=>{clearInterval(poll);PULLING=false;render();});
+  },3000);
+}
+function pullNow(){
+  if(PULLING||!PULLSRV)return;
+  PULLING=true;render();
+  fetch(PULL_URL+'/pull',{method:'POST'}).then(()=>pullWatch())
+    .catch(()=>{PULLING=false;render();});
+}
 
 /* ============================ RENDER ============================ */
 /* Phase 9 — history explorer: the Time Machine as a full-history scrubber.
@@ -1041,6 +1072,7 @@ function masthead(r){const zone=zoneOf(r.composite);return `<div class="mast">
     <div style="display:flex;align-items:center;gap:9px;justify-content:flex-end;margin-top:6px"><span style="width:9px;height:9px;border-radius:50%;background:${ZC[zone]};box-shadow:0 0 10px ${ZC[zone]}"></span><span style="font:14px 'JetBrains Mono',monospace">${r.label}</span></div>
     <div style="font:11px 'JetBrains Mono',monospace;color:#6B7280;margin-top:4px">${r.date} · ${zone.toUpperCase()} · BTC ${r.price}</div>
     ${window.COCKPIT_LIVE&&window.COCKPIT_LIVE.generated?`<div style="font:10px 'JetBrains Mono',monospace;color:#454b55;margin-top:3px">live feed · updated ${window.COCKPIT_LIVE.generated}</div>`:''}
+    ${PULLSRV?`<div style="margin-top:7px"><span class="pullbtn${PULLING?' on':''}" onclick="pullNow()">${PULLING?'⟳ pulling fresh data — about a minute…':'⟳ pull fresh data'}</span></div>`:''}
   </div></div>`;}
 
 function render(){
